@@ -7,22 +7,22 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Running build"
+                echo 'Running build'
             }
         }
         stage('Test') {
             steps {
-                echo 'Running Test"
+                echo 'Running Test'
             }
             post {
                 always {
-                    echo 'Running post-test"
+                    echo 'Running post-test'
                 }
             }
         }
         stage('Deliver') {
             steps {
-                echo 'Running Deliver"
+                echo 'Running Deliver'
             }
         }
     }
