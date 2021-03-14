@@ -1,11 +1,28 @@
 pipeline {
-    agent none
+    agent {
+        docker {
+            image 'androidsdk/android-29'
+        }
+    }
     stages {
         stage('Build') {
-            agent {
-                docker {
-                    image 'androidsdk/android-29'
+            steps {
+                ls
+            }
+        }
+        stage('Test') {
+            steps {
+                ls
+            }
+            post {
+                always {
+                    ls
                 }
+            }
+        }
+        stage('Deliver') {
+            steps {
+                ls
             }
         }
     }
