@@ -7,9 +7,6 @@ pipeline {
                     image 'androidsdk/android-29'
                 }
             }
-            steps {
-                
-            }
         }
     }
 }
