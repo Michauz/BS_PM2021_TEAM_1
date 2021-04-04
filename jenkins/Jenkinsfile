@@ -17,7 +17,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh './gradlew test${VARIANT}UnitTest'
+                test
                 echo 'Finished Test'
             }
             post {
