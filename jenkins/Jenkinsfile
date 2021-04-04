@@ -17,7 +17,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh './gradlew test --stacktrace --info --debug --scan'
+                sh './gradlew test --stacktrace --info --scan'
                 echo 'Finished Test'
             }
             post {
