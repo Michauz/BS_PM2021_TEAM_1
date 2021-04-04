@@ -18,6 +18,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 test
+                junit test
                 echo 'Finished Test'
             }
             post {
