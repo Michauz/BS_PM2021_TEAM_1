@@ -17,7 +17,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh 'test'
                 sh 'junit test'
                 echo 'Finished Test'
             }
