@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh 'avdmanager create avd -n test -k "system-images;android-29;google_apis;x86"'
+                sh 'avdmanager create avd -n test -k "system-images;android-29;google_apis;x86_64"'
                 sh 'adb shell am instrument -w app.src.test.java.app.msda.qna'
             }
             post {
