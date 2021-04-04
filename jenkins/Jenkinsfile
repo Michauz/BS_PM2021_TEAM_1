@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'echo no | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86_64"'
-                sh 'adb devices'
+                sh './gradlew connectedAndroidTest'
             }
             post {
                 always {
