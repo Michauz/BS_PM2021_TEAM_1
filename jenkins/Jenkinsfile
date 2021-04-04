@@ -17,8 +17,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                test
-                junit test
+                sh 'test'
+                sh 'junit test'
                 echo 'Finished Test'
             }
             post {
