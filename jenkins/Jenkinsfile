@@ -18,7 +18,6 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh './gradlew test'
-                sh './gradlew androidTest'
                 sh './gradlew cAT'
                 echo 'Finished Test'
             }
