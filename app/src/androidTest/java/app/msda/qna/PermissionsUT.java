@@ -21,12 +21,10 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class PermissionsUT {
-    //private Intent intent;
     private MainActivity mainActivity;
     @Before
     public void createClass() {
         mainActivity = new MainActivity();
-
     }
 
     @Test
