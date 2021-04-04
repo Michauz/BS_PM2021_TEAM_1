@@ -11,6 +11,7 @@ pipeline {
                 sh 'chmod +x gradlew && ./gradlew --no-daemon --stacktrace clean'
             }
         }
+        //test
         stage('Test') {
             steps {
                 echo 'Running Test'
