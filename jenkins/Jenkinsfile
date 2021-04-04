@@ -18,6 +18,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh "./gradlew test${VARIANT}UnitTest"
+                echo 'Finished Test'
             }
             post {
                 always {
