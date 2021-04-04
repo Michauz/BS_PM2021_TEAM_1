@@ -3,7 +3,7 @@ plugins {
 }
 apply plugin: 'com.google.gms.google-services'
 android {
-    compileSdkVersion 29
+    compileSdkVersion buildToolsVersion
 
     defaultConfig {
         applicationId "app.msda.qna"
@@ -25,7 +25,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '29.0.2'
+    buildToolsVersion buildToolsVersion
 }
 
 dependencies {
