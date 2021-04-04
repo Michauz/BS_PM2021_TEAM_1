@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh './gradlew testExampleUnitTestUnitTest'
+                adb shell am instrument -w <test_package_name>/<runner_class>
             }
             post {
                 always {
