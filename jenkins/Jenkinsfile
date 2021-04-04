@@ -13,7 +13,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                cameraPermissionGrantedCheck()
+                sh './gradlew --no-daemon --debug :app:src:androidTest:java:app.msda.qna:PermissionUT'
             }
             post {
                 always {
