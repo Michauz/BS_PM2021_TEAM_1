@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh './gradlew --no-daemon --debug :app:src:test:java:app.msda.qna:ExampleUnitTest'
+                sh './gradlew --no-daemon --debug'
             }
             post {
                 always {
