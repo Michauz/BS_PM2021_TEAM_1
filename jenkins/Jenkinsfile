@@ -14,7 +14,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh 'echo no | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86_64"'
 
                 sh 'docker run -it --rm --privileged androidsdk/android-29:latest bash'
                 sh 'sdkmanager --list'
