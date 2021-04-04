@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'echo no | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86_64"'
-                sh '$ adb shell am instrument -w androidTest/PermissionsUT'
+                sh 'adb shell am instrument -w androidTest/PermissionsUT'
             }
             post {
                 always {
