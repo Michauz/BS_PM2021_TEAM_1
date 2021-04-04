@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-                adb shell am instrument -w app.src.test.java.app.msda.qna
+                sh 'adb shell am instrument -w app.src.test.java.app.msda.qna'
             }
             post {
                 always {

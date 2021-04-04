@@ -34,14 +34,14 @@ public class PermissionsUT {
         assertEquals(mainActivity.getApplicationContext().checkSelfPermission(Manifest.permission.CAMERA), PackageManager.PERMISSION_GRANTED);
     }
 
-    /*@Test
+    @Test
     public void cameraPermissionDeniedCheck() {
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
         Permissions.askForCameraPerm(mainActivity);
         assertEquals(mainActivity.getApplicationContext().checkSelfPermission(Manifest.permission.CAMERA), PackageManager.PERMISSION_DENIED);
     }
 /*------------------------------------------------------------------------------*/
-    /*@Test
+    @Test
     public void filesPermissionGrantedCheck() {
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
         Permissions.askForFilesPerm(mainActivity);
@@ -53,5 +53,5 @@ public class PermissionsUT {
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
         Permissions.askForFilesPerm(mainActivity);
         assertEquals(mainActivity.getApplicationContext().checkSelfPermission(Manifest.permission.CAMERA), PackageManager.PERMISSION_DENIED);
-    }*/
+    }
 }
