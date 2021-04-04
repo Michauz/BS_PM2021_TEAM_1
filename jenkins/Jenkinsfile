@@ -8,13 +8,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build'
-                sh 'chmod +x build.gradle'
+                sh 'chmod +x gradlew && ./gradlew --no-daemon --stacktrace clean'
             }
         }
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh './build.gradle --no-daemon --debug'
+                sh './gradlew connectedAndroidTest'
             }
             post {
                 always {
