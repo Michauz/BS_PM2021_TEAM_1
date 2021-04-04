@@ -8,6 +8,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build'
+                sh 'sudo chown $USER:$USER $ANDROID_HOME -R'
                 sh 'chmod +wx gradlew && ./gradlew --no-daemon --stacktrace clean'
                 sh ' echo no | avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-29;google_apis;x86_64"'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
