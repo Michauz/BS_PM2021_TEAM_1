@@ -20,5 +20,9 @@ public class SignUpCheck {
         assertEquals(signUpActivity.getPassword(),signUpActivity.getPassword()); //checking that the sign up screen has a password input/field
     }
 
-   
+    @Test
+    public void isLoginButtonExist() {
+        SignUpActivity signUpActivity=new SignUpActivity();// creating a new object of class signUpActivity succeeded
+        assertEquals(signUpActivity.getBtn(),signUpActivity.getBtn()); //checking that the sign up screen has a button input/field
+    }
 }
