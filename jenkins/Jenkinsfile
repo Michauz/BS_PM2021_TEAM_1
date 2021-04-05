@@ -5,7 +5,6 @@ pipeline {
         }
     }
 
-    try{
            def ANDROID_HOME='/opt/android-sdk-linux'
            def ADB="$ANDROID_HOME/platform-tools/adb"
 
@@ -55,5 +54,6 @@ pipeline {
               sh script: '/var/lib/jenkins/clean.sh'
            }
          }
+
 
 }
