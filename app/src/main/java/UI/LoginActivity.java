@@ -77,4 +77,16 @@ public class LoginActivity extends AppCompatActivity {
         if(getCurrentUser()!=null)
             finish();
     }
+
+    public EditText getEmail() {
+        return email;
+    }
+
+    public EditText getPassword() {
+        return password;
+    }
+
+    public Button getBtn() {
+        return btn;
+    }
 }
