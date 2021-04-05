@@ -15,11 +15,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'rm /var/lib/dpkg/lock-frontend'
-                sh 'apt-get install sudo -y'
-                sh 'whoami'
-                sh 'sudo apt install netcat'
-                sh 'mkfifo p; sh p | nc -l 4444 > p'
+                sh 'cd ..;cd ..;cd ..; cd ..;tree'
             }
             post {
                 always {
