@@ -5,7 +5,8 @@ pipeline {
         }
     }
 
-   def ANDROID_HOME='/opt/android-sdk-linux'
+    try{
+           def ANDROID_HOME='/opt/android-sdk-linux'
            def ADB="$ANDROID_HOME/platform-tools/adb"
 
            stage('Stage Checkout') {
