@@ -17,28 +17,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-
-               $ANDROID_SDK/tools/emulator -avd first_avd -wipe-data &
-               EMULATOR_PID=$!
-
-               WAIT_CMD="$ANDROID_SDK/platform-tools/adb wait-for-device shell getprop init.svc.bootanim"
-               until $WAIT_CMD | grep -m 1 stopped; do
-                 echo "Waiting..."
-                 sleep 1
-               done
-
-               $ANDROID_SDK/platform-tools/adb shell input keyevent 82
-
-               $ANDROID_SDK/platform-tools/adb logcat -c
-               $ANDROID_SDK/platform-tools/adb logcat > build/logcat.log &
-               LOGCAT_PID=$!
-
-               ./gradlew connectedAndroidTest -i
-
-               kill $LOGCAT_PID
-               kill $EMULATOR_PID
-
-            }
+                sh '$ANDROID_SDK/tools/emulator -avd first_avd -wipe-data &;EMULATOR_PID=$!;WAIT_CMD="$ANDROID_SDK/platform-tools/adb wait-for-device shell getprop init.svc.bootanim";until $WAIT_CMD | grep -m 1 stopped; do echo "Waiting...";sleep 1;done;$ANDROID_SDK/platform-tools/adb shell input keyevent 82;$ANDROID_SDK/platform-tools/adb logcat -c;$ANDROID_SDK/platform-tools/adb logcat > build/logcat.log &;LOGCAT_PID=$!;./gradlew connectedAndroidTest -i;kill $LOGCAT_PID;kill $EMULATOR_PID'
+                 }
             post {
                 always {
                     echo 'Running post-test'
@@ -46,7 +26,7 @@ pipeline {
             }
         }
         stage('Deliver') {
-            steps {
+           steps {
                 echo 'Running Deliver'
             }
         }
