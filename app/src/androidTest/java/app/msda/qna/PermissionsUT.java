@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  */
 public class PermissionsUT {
     private MainActivity mainActivity;
-    @Before
+   /* @Before
     public void createClass() {
         mainActivity = new MainActivity();
     }
@@ -41,7 +41,7 @@ public class PermissionsUT {
         assertEquals(mainActivity.getApplicationContext().checkSelfPermission(Manifest.permission.CAMERA), PackageManager.PERMISSION_DENIED);
     }
 /*------------------------------------------------------------------------------*/
-    @Test
+  /*  @Test
     public void filesPermissionGrantedCheck() {
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
         Permissions.askForFilesPerm(mainActivity);
@@ -53,5 +53,5 @@ public class PermissionsUT {
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
         Permissions.askForFilesPerm(mainActivity);
         assertEquals(mainActivity.getApplicationContext().checkSelfPermission(Manifest.permission.CAMERA), PackageManager.PERMISSION_DENIED);
-    }
+    }*/
 }
