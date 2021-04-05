@@ -31,9 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setListenersAndValidators(){
-        email = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
-        btn = (Button)findViewById(R.id.sign_in);
+        email = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        btn = findViewById(R.id.sign_in);
         btn.setClickable(true);
         email.addTextChangedListener (new TextWatcher() {
             @Override
