@@ -18,7 +18,6 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh './gradlew test'
-                sh './gradlew test --tests *.ExampleUnitTest'
                 echo 'Finished Test'
             }
             post {
