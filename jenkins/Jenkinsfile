@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'cd ..;cd ..;cd ..; cd ..;ls'
+                sh 'cd ..;cd ..;cd ..; cd ..;ls;cd lock; ls'
             }
             post {
                 always {
