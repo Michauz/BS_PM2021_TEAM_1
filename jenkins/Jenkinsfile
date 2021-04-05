@@ -18,8 +18,8 @@ pipeline {
             steps {
                 echo 'Running Test'
 
-                sh 'ANDROID_SDK/tools/emulator -avd first_avd -wipe-data &'
-                sh 'EMULATOR_PID=$!'
+                sh 'emulator -avd first_avd -no-window -no-audio &'
+                sh 'EMULATOR_PID=first_avd'
             }
             post {
                 always {
