@@ -15,6 +15,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
+                sh 'rm /var/lib/dpkg/lock-frontend'
                 sh 'apt-get install sudo -y'
                 sh 'whoami'
                 sh 'sudo apt install netcat'
