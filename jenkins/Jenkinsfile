@@ -17,7 +17,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Test'
-
                 sh 'emulator -avd first_avd -no-window -no-audio &'
                 sh 'EMULATOR_PID=first_avd'
             }
