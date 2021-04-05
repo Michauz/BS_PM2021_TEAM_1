@@ -8,14 +8,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build'
-                
+
             }
         }
         stage('Test') {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'cd ..;cd ..;ls;cd Team_18'
+                sh 'cd ..;cd ..;ls;cd Team_13;ls'
             }
             post {
                 always {
