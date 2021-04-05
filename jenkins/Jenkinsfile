@@ -36,9 +36,7 @@ pipeline {
                     sh script: '/var/lib/jenkins/kill-emu.sh'
                 }
               )
-              if (error != null) {
-                  throw error
-              }
+
             }
 
             post {
