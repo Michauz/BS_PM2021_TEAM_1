@@ -54,4 +54,6 @@ pipeline {
            stage('Stage Clean') {
               sh script: '/var/lib/jenkins/clean.sh'
            }
+         }
+
 }
