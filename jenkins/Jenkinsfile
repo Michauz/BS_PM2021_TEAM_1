@@ -4,48 +4,52 @@ pipeline {
             image 'androidsdk/android-29'
         }
     }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Running build'
+                sh 'chmod +x gradlew && ./gradlew --no-daemon --stacktrace clean'
+                sh 'echo no | avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-29;google_apis;x86_64"'
+                sh 'emulator -avd first_avd -no-window -no-audio &'
+                sh 'adb devices'
+                sh 'android list avd'
+                sh 'adb start-server'
+            }
+        }
+        stage('Stage Instumental Tests') {
+              sh "$ADB start-server"
 
-           def ANDROID_HOME='/opt/android-sdk-linux'
-           def ADB="$ANDROID_HOME/platform-tools/adb"
-
-           stage('Stage Checkout') {
-             git branch: 'develop', credentialsId: 'd9f13c8b-f917-4374-8849-2b9730885333', url: 'http://git.hostname.com/something.git'
-           }
-
-           stage('Stage Build') {
-             sh "./gradlew clean assembleRelease"
-           }
-
-           stage('Stage Unit Tests') {
-             sh "./gradlew testReleaseUnitTest"
-           }
-
-           stage('Stage Instumental Tests') {
-             sh "$ADB start-server"
-
-             def error
-             parallel (
-               launchEmulator: {
-                   sh "$ANDROID_HOME/tools/qemu/linux-x86_64/qemu-system-x86_64 -engine classic -prop persist.sys.language=en -prop persist.sys.country=US -avd test -no-snapshot-load -no-snapshot-save -no-window"
-               },
-               runAndroidTests: {
-                   timeout(time: 20, unit: 'SECONDS') {
-                     sh "$ADB wait-for-device"
-                   }
-                   try {
-                       sh "./gradlew :MyKet:connectedAndroidTest"
-                   } catch(e) {
-                       error = e
-                   }
-                   sh script: '/var/lib/jenkins/kill-emu.sh'
-               }
-             )
-             if (error != null) {
-                 throw error
-             }
-           }
-           currentBuild.result = "SUCCESS"
-         
-
-
+              def error
+              parallel (
+                launchEmulator: {
+                    sh "$ANDROID_HOME/tools/qemu/linux-x86_64/qemu-system-x86_64 -engine classic -prop persist.sys.language=en -prop persist.sys.country=US -avd test -no-snapshot-load -no-snapshot-save -no-window"
+                },
+                runAndroidTests: {
+                    timeout(time: 20, unit: 'SECONDS') {
+                      sh "$ADB wait-for-device"
+                    }
+                    try {
+                        sh "./gradlew :MyKet:connectedAndroidTest"
+                    } catch(e) {
+                        error = e
+                    }
+                    sh script: '/var/lib/jenkins/kill-emu.sh'
+                }
+              )
+              if (error != null) {
+                  throw error
+              }
+            }
+            post {
+                always {
+                    echo 'Running post-test'
+                }
+            }
+        }
+        stage('Deliver') {
+            steps {
+                echo 'Running Deliver'
+            }
+        }
+    }
 }
