@@ -22,4 +22,9 @@ public class LoginCheck {
         assertEquals(loginActivity.getPassword(),loginActivity.getPassword()); //checking that the login screen has a password input/field
     }
     
+    @Test
+    public void isLoginButtonExist() {
+        LoginActivity loginActivity=new LoginActivity();// creating a new object of class Authentication succeeded
+        assertEquals(loginActivity.getBtn(),loginActivity.getBtn()); //checking that the login screen has a button input/field
+    }
 }
