@@ -78,4 +78,16 @@ public class SignUpActivity extends AppCompatActivity {
         if(getCurrentUser()!=null)
             finish();
     }
+
+    public Button getBtn() {
+        return btn;
+    }
+
+    public EditText getPassword() {
+        return password;
+    }
+
+    public EditText getEmail() {
+        return email;
+    }
 }
