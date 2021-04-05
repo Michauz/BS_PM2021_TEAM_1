@@ -32,4 +32,8 @@ public class Permissions {
             // if permission for gallery and files isn't permitted than ask the user to grant it
             activity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
     }
+
+    public int getRequestCode() {
+        return REQUEST_CODE;
+    }
 }
