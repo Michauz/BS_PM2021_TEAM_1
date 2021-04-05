@@ -12,14 +12,13 @@ pipeline {
                 sh 'echo no | avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-29;google_apis;x86_64"'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
                 sh 'adb devices'
-                sh 'adb start-server'
             }
         }
         stage('Test') {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh './gradlew cAT'
+
             }
             post {
                 always {
@@ -34,8 +33,7 @@ pipeline {
         }
     }
 
-    node {
-      try{
+    try{
         def ANDROID_HOME='/opt/android-sdk-linux'
         def ADB="$ANDROID_HOME/platform-tools/adb"
 
@@ -85,5 +83,4 @@ pipeline {
            sh script: '/var/lib/jenkins/clean.sh'
         }
       }
-    }
 }
