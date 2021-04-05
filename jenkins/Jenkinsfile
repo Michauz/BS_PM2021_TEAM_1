@@ -18,7 +18,8 @@ pipeline {
             steps {
                 echo 'Running Test'
 
-                sh 'avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-29;google_apis;x86_64"'
+                sh 'ANDROID_SDK/tools/emulator -avd first_avd -wipe-data &'
+                sh 'EMULATOR_PID=$!'
             }
             post {
                 always {
