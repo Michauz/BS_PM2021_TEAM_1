@@ -12,17 +12,12 @@ pipeline {
                 sh 'echo no | avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-29;google_apis;x86_64"'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
                 sh 'adb devices'
-                
             }
         }
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh "$ANDROID_HOME/tools/qemu/linux-x86_64/qemu-system-x86_64 -engine classic -prop persist.sys.language=en -prop persist.sys.country=US -avd test -no-snapshot-load -no-snapshot-save -no-window"
-                sh "$ADB wait-for-device"
-                sh "./gradlew :MyKet:connectedAndroidTest"
-                sh script: '/var/lib/jenkins/kill-emu.sh'
-
+                sh 'emulator -avd first_avd -no-window -no-audio &'
 
             }
             post {
