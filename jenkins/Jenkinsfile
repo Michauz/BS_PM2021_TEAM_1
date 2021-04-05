@@ -16,7 +16,7 @@ pipeline {
                 sh 'adb start-server'
             }
         }
-        stage('Stage Instumental Tests') {
+        stage('Test') {
               sh "$ADB start-server"
 
               def error
@@ -40,16 +40,18 @@ pipeline {
                   throw error
               }
             }
+
             post {
                 always {
                     echo 'Running post-test'
                 }
             }
         }
+
         stage('Deliver') {
             steps {
                 echo 'Running Deliver'
             }
         }
-    
+
 }
