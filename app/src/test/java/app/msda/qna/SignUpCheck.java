@@ -14,5 +14,11 @@ public class SignUpCheck {
         assertEquals(signUpActivity.getEmail(),signUpActivity.getEmail()); //checking that the sign up screen has a mail input/field
     }
 
-    
+    @Test
+    public void isPasswordExist() {
+        SignUpActivity signUpActivity=new SignUpActivity();// creating a new object of class signUpActivity succeeded
+        assertEquals(signUpActivity.getPassword(),signUpActivity.getPassword()); //checking that the sign up screen has a password input/field
+    }
+
+   
 }
