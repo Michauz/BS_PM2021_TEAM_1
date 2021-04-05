@@ -45,15 +45,7 @@ pipeline {
              }
            }
            currentBuild.result = "SUCCESS"
-         } catch (e) {
-           currentBuild.result = "FAILED"
-       //    notifyFailed()
-           throw e
-         } finally {
-           stage('Stage Clean') {
-              sh script: '/var/lib/jenkins/clean.sh'
-           }
-         }
+         
 
 
 }
