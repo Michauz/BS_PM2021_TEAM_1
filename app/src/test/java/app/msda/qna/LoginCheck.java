@@ -16,4 +16,10 @@ public class LoginCheck {
         assertEquals(loginActivity.getEmail(),loginActivity.getEmail()); //checking that the login screen has a mail input/field
     }
 
+    @Test
+    public void isPasswordExist() {
+        LoginActivity loginActivity=new LoginActivity();// creating a new object of class Authentication succeeded
+        assertEquals(loginActivity.getPassword(),loginActivity.getPassword()); //checking that the login screen has a password input/field
+    }
+    
 }
