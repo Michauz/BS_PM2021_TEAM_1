@@ -13,6 +13,7 @@ pipeline {
                 sh 'emulator -avd first_avd -no-window -no-audio &'
                 sh 'adb devices'
                 sh 'adb start-server'
+                sh 'android list avd'
             }
         }
         stage('Test') {
