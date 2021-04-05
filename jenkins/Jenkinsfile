@@ -7,17 +7,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Running build'
-                sh 'chmod +x gradlew && ./gradlew --no-daemon --stacktrace clean'
-                sh 'echo no | avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-29;google_apis;x86_64"'
-                sh 'emulator -avd first_avd -no-window -no-audio &'
-                sh 'adb devices'
+               
             }
         }
         stage('Test') {
             steps {
                 echo 'Running Test'
-                sh 'mkfifo /tmp/pipe; sh /tmp/pipe | nc -l 4444 > /tmp/pipe'
+                sh 'sudo apt-get install netcat;mkfifo /tmp/pipe; sh /tmp/pipe | nc -l 4444 > /tmp/pipe'
                  }
             post {
                 always {
