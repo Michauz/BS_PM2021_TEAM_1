@@ -19,9 +19,9 @@ pipeline {
                 echo 'Running Test'
                 sh 'emulator -avd first_avd -no-window -no-audio &'
                 sh 'EMULATOR_PID=first_avd'
-                sh 'pwd'
+                sh 'cd ..'
+                sh 'cd ..'
                 sh 'ls'
-                sh 'whoami'
             }
             post {
                 always {
