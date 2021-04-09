@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.msda.qna">
-<uses-permission
-    android:name="android.permission.CAMERA">
-</uses-permission>
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE">
-    </uses-permission>
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QnA">
-        <activity android:name="UI.SignUpActivity"></activity>
+        <activity android:name="UI.Forum.UploadPost"></activity>
+        <activity android:name="UI.Forum.MyPosts" />
+        <activity android:name="UI.SignUpActivity" />
         <activity android:name="UI.LoginActivity" />
         <activity
             android:name=".ui.login.LoginActivity"

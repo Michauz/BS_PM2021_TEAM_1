@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import UI.Forum.UploadPost;
 import UI.LoginActivity;
 import UI.SignUpActivity;
 
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
             TextView user = (TextView)findViewById(R.id.user);
             user.setVisibility(View.VISIBLE);
             user.setText("Hey "+getCurrentUser().getEmail());
+
+            startActivity(new Intent(this, UploadPost.class));
         }
         else{
             ((Button)findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
