@@ -62,9 +62,6 @@ public class MainActivity extends AppCompatActivity {
     public void SignOut(View view){
         getInstance().signOut();
         Update();
-
-
-       Permissions.begForPermissions(this); // begging the user for permissions of camera and files
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -76,6 +73,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT);
-
     }
 }
