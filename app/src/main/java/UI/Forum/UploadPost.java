@@ -78,8 +78,7 @@ public class UploadPost extends AppCompatActivity {
         post.put("content", content.getText().toString());
         post.put("postID", postID);
         post.put("email", Authentication.getCurrentUser().getEmail());
-
-
+        
         CloudFireStore.getInstance().collection("posts")
                 .document(Authentication.getUserID() + "-" + (int) postID)
                 .set(post)
