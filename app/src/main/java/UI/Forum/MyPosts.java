@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -31,7 +32,8 @@ public class MyPosts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_posts);
-
+        posts = new ArrayList<>();
+        getPosts();
     }
 
     private void getPosts(){
@@ -44,6 +46,7 @@ public class MyPosts extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         posts.add(new Post(document));
                     }
+                    posts.sort(null);
                     listOfPosts();
                 } else {
                     finish();
@@ -63,13 +66,20 @@ public class MyPosts extends AppCompatActivity {
             //Button as post
             Button post = new Button(this);
             post.setId(i);
-            post.setText(posts.get(i).getTitle().substring(0,50));
+            post.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            if(posts.get(i).getTitle().length()>100)
+                post.setText(posts.get(i).getTitle().substring(0,100));
+            else
+                post.setText(posts.get(i).getTitle());
             post.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     UI.Forum.Post.post = posts.get(v.getId());
                     goToPost();
                 }
             });
+            params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            newline.addView(post,params);
             ((LinearLayout)findViewById(R.id.insideScroll)).addView(newline);
         }
     }
