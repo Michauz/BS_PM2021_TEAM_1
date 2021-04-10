@@ -16,6 +16,7 @@ import UI.SignUpActivity;
 
 import static Adapters.Authentication.getCurrentUser;
 import static Adapters.Authentication.getInstance;
+
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -35,34 +36,37 @@ public class MainActivity extends AppCompatActivity {
         Update();
     }
 
-    private void Update(){
-        if(getCurrentUser()!=null){
-            ((Button)findViewById(R.id.goto_sign_in)).setVisibility(View.GONE);
-            ((Button)findViewById(R.id.goto_sign_up)).setVisibility(View.GONE);
-            ((Button)findViewById(R.id.goto_sign_out)).setVisibility(View.VISIBLE);
-            TextView user = (TextView)findViewById(R.id.user);
+    private void Update() {
+        if (getCurrentUser() != null) {
+            ((Button) findViewById(R.id.goto_sign_in)).setVisibility(View.GONE);
+            ((Button) findViewById(R.id.goto_sign_up)).setVisibility(View.GONE);
+            ((Button) findViewById(R.id.goto_sign_out)).setVisibility(View.VISIBLE);
+            TextView user = (TextView) findViewById(R.id.user);
             user.setVisibility(View.VISIBLE);
-            user.setText("Hey "+getCurrentUser().getEmail());
+            user.setText("Hey " + getCurrentUser().getEmail());
 
-          //  startActivity(new Intent(this, UploadPost.class));
-        }
-        else{
-            ((Button)findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
-            ((Button)findViewById(R.id.goto_sign_up)).setVisibility(View.VISIBLE);
-            ((Button)findViewById(R.id.goto_sign_out)).setVisibility(View.GONE);
-            ((TextView)findViewById(R.id.user)).setVisibility(View.GONE);
+            // startActivity(new Intent(this, UploadPost.class));
+        } else {
+            ((Button) findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.goto_sign_up)).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.goto_sign_out)).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.user)).setVisibility(View.GONE);
         }
     }
-    public void SignIn(View view){
+
+    public void SignIn(View view) {
         startActivity(new Intent(this, LoginActivity.class));
     }
-    public void SignUp(View view){
+
+    public void SignUp(View view) {
         startActivity(new Intent(this, SignUpActivity.class));
     }
-    public void SignOut(View view){
+
+    public void SignOut(View view) {
         getInstance().signOut();
         Update();
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
