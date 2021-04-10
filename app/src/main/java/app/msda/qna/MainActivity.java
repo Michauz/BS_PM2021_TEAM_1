@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             user.setVisibility(View.VISIBLE);
             user.setText("Hey "+getCurrentUser().getEmail());
 
-            startActivity(new Intent(this, UploadPost.class));
+          //  startActivity(new Intent(this, UploadPost.class));
         }
         else{
             ((Button)findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
