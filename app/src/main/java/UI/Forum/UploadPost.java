@@ -15,23 +15,30 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import Adapters.Authentication;
 import Adapters.CloudFireStore;
+import Adapters.FireBaseStorage;
 import Adapters.Permissions;
 import app.msda.qna.R;
 
 public class UploadPost extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888, REQUEST_CODE = 1;
     private ImageView image;
-    private EditText title, context;
+    private EditText title, content;
     private boolean photoTaken;
+    private double postID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,44 +47,48 @@ public class UploadPost extends AppCompatActivity {
 
         image = findViewById(R.id.imageView);
         title = findViewById(R.id.post_title);
-        context = findViewById(R.id.context);
+        content = findViewById(R.id.content);
 
         photoTaken = false;
+
+        CloudFireStore.getInstance().collection("post_counter").document("counter").get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists())
+                                postID = document.getDouble("counter");
+                        }
+                    }
+                });
     }
 
     public void postQuestion(View view) {
         if (title.getText().toString().equals("")) {
             Toast.makeText(this, "Title is empty!", Toast.LENGTH_SHORT).show();
             return;
-        } else if (context.getText().toString().equals("")) {
-            Toast.makeText(this, "Context is empty!", Toast.LENGTH_SHORT).show();
+        } else if (content.getText().toString().equals("")) {
+            Toast.makeText(this, "Content is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         Map<String, Object> post = new HashMap<>();
         post.put("title", title.getText().toString());
-        post.put("context", context.getText().toString());
-        post.put("postID", 2);
-        post.put("username", Authentication.getUsername());
-        if (photoTaken)
-        {
-            // Create a storage reference from our app
-            StorageReference storageRef = ;
+        post.put("content", content.getText().toString());
+        post.put("postID", postID);
+        post.put("email", Authentication.getCurrentUser().getEmail());
 
-            // Create a reference to "mountains.jpg"
-            StorageReference mountainsRef = storageRef.child("mountains.jpg");
 
-            // Create a reference to 'images/mountains.jpg'
-            StorageReference mountainImagesRef = storageRef.child("images/mountains.jpg");
-
-            // While the file names are the same, the references point to different files
-            mountainsRef.getName().equals(mountainImagesRef.getName());    // true
-            mountainsRef.getPath().equals(mountainImagesRef.getPath());    // false
-        }
-        CloudFireStore.getInstance().collection("posts").document(Authentication.getUserID()).set(post)
+        CloudFireStore.getInstance().collection("posts")
+                .document(Authentication.getUserID() + "-" + (int) postID)
+                .set(post)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        if (photoTaken)
+                            uploadImage();
+                        updatePostsCounter();
                         msg(true);
                         finish();
                     }
@@ -90,12 +101,12 @@ public class UploadPost extends AppCompatActivity {
                 });
     }
 
-    private void msg(boolean isSucceeded)
-    {
-        if(isSucceeded)
-            Toast.makeText(this, "DocumentSnapshot successfully written!",Toast.LENGTH_SHORT).show();
-        else Toast.makeText(this, "DocumentSnapshot failed!",Toast.LENGTH_SHORT).show();
+    private void msg(boolean isSucceeded) {
+        if (isSucceeded)
+            Toast.makeText(this, "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, "DocumentSnapshot failed!", Toast.LENGTH_SHORT).show();
     }
+
     public void addPhoto(View view) {
         if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -131,5 +142,49 @@ public class UploadPost extends AppCompatActivity {
             else
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT);
 
+    }
+
+    private void updatePostsCounter() {
+        Map<String, Object> counter = new HashMap<>();
+        counter.put("counter", ++postID);
+
+        CloudFireStore.getInstance().collection("post_counter").document("counter")
+                .set(counter).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+
+    private void uploadImage() {
+        // Get the data from an ImageView as bytes
+        image.setDrawingCacheEnabled(true);
+        image.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference mountainsRef = FireBaseStorage.getInstance().getReference().child((int) postID + ".jpg");
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
     }
 }
