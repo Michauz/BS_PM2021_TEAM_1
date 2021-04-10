@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@+id/addPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/context"
+        app:layout_constraintTop_toBottomOf="@+id/content"
         app:srcCompat="@drawable/question" />
 
     <TextView
@@ -32,14 +32,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/context_title"
+        android:id="@+id/content_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Context:"
+        android:text="Content:"
         android:textColor="#000000"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/context"
+        app:layout_constraintBottom_toTopOf="@+id/content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_title" />
@@ -52,13 +52,13 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Title:"
-        app:layout_constraintBottom_toTopOf="@+id/context_title"
+        app:layout_constraintBottom_toTopOf="@+id/content_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/uploadPost_title" />
 
     <EditText
-        android:id="@+id/context"
+        android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="35dp"
@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/context_title" />
+        app:layout_constraintTop_toBottomOf="@+id/content_title" />
 
     <Button
         android:id="@+id/addPhoto"
