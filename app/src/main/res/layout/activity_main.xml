@@ -17,8 +17,8 @@
 
     <Button
         android:id="@+id/goto_sign_in"
-        android:layout_width="90dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:onClick="SignIn"
         android:text="Sign in"
@@ -48,6 +48,7 @@
         android:id="@+id/goto_sign_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="SignOut"
         android:text="Sign out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

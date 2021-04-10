@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Permissions.begForPermissions(this);
+        Permissions.begForPermissions(this);
         Update();
     }
 
@@ -55,17 +54,17 @@ public class MainActivity extends AppCompatActivity {
     }
     public void SignIn(View view){
         startActivity(new Intent(this, LoginActivity.class));
+        Update();
     }
     public void SignUp(View view){
         startActivity(new Intent(this, SignUpActivity.class));
+        Update();
     }
     public void SignOut(View view){
         getInstance().signOut();
         Update();
-
-
-       Permissions.begForPermissions(this); // begging the user for permissions of camera and files
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

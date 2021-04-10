@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QnA">
-        <activity android:name="UI.Forum.UploadPost"></activity>
+        <activity android:name="UI.Forum.Post"></activity>
+        <activity android:name="UI.Forum.UploadPost" />
         <activity android:name="UI.Forum.MyPosts" />
         <activity android:name="UI.SignUpActivity" />
         <activity android:name="UI.LoginActivity" />
