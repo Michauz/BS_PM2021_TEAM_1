@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,8 +25,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import Adapters.Authentication;
 import Adapters.CloudFireStore;
@@ -78,7 +82,8 @@ public class UploadPost extends AppCompatActivity {
         post.put("content", content.getText().toString());
         post.put("postID", postID);
         post.put("email", Authentication.getCurrentUser().getEmail());
-        
+
+        post.put("date",(new Date()).getTime());
         CloudFireStore.getInstance().collection("posts")
                 .document(Authentication.getUserID() + "-" + (int) postID)
                 .set(post)
