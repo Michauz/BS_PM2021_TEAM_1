@@ -31,4 +31,8 @@ public class Post extends AppCompatActivity {
     public void reply(View view){
 
     }
+
+    public static Adapters.Post getPost() {
+        return post;
+    }
 }
