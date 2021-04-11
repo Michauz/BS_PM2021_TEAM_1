@@ -87,4 +87,12 @@ public class MyPosts extends AppCompatActivity {
     private void goToPost(){
         startActivity(new Intent(this, UI.Forum.Post.class));
     }
+
+    public CloudFireStore getDB() {
+        return db;
+    }
+    public ArrayList getMyPostsList()
+    {
+        return posts;
+    }
 }
