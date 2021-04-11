@@ -15,7 +15,7 @@ public class PostCheck {
 
     @Test
     public void isTitleExist() {
-        try {SPM2021T1-57 - testing post view
+        try {
             Post.post = new Adapters.Post(null);
             assertEquals(Post.post.getTitle(), Post.getPost().getTitle()); //checking that the post has a title
         } catch (Exception e) {
