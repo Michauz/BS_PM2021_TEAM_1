@@ -61,7 +61,7 @@ public class UploadPost extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            if (document.exists())
+                            if (document.exists()) // get the post ID from DB
                                 postID = document.getDouble("counter");
                         }
                     }
