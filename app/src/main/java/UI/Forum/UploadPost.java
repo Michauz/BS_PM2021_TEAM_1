@@ -107,8 +107,8 @@ public class UploadPost extends AppCompatActivity {
 
     private void msg(boolean isSucceeded) {
         if (isSucceeded)
-            Toast.makeText(this, "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show();
-        else Toast.makeText(this, "DocumentSnapshot failed!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Post uploaded successfully", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, "Post upload failed", Toast.LENGTH_SHORT).show();
     }
 
     public void addPhoto(View view) {

@@ -42,14 +42,16 @@ public class MainActivity extends AppCompatActivity {
             ((Button) findViewById(R.id.goto_sign_up)).setVisibility(View.GONE);
             ((Button) findViewById(R.id.goto_sign_out)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.goto_my_posts)).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.goto_new_post)).setVisibility(View.VISIBLE);
             TextView user = (TextView) findViewById(R.id.user);
             user.setVisibility(View.VISIBLE);
-            user.setText("Hey,\n" + getCurrentUser().getEmail());
+            user.setText(getCurrentUser().getEmail().split("@")[0]);
         } else {
             ((Button) findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.goto_sign_up)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.goto_sign_out)).setVisibility(View.GONE);
             ((Button) findViewById(R.id.goto_my_posts)).setVisibility(View.GONE);
+            ((Button) findViewById(R.id.goto_new_post)).setVisibility(View.GONE);
             ((TextView) findViewById(R.id.user)).setVisibility(View.GONE);
         }
     }
