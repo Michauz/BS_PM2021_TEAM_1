@@ -82,8 +82,8 @@ public class UploadPost extends AppCompatActivity {
         post.put("content", content.getText().toString());
         post.put("postID", postID);
         post.put("email", Authentication.getCurrentUser().getEmail());
+        post.put("date", (new Date()).getTime());
 
-        post.put("date",(new Date()).getTime());
         CloudFireStore.getInstance().collection("posts")
                 .document(Authentication.getUserID() + "-" + (int) postID)
                 .set(post)
@@ -103,6 +103,12 @@ public class UploadPost extends AppCompatActivity {
                         msg(false);
                     }
                 });
+
+        Map<String,Object> counter=new HashMap<>();
+        counter.put("counter",0); // groundings for replies (collection of them + counter)
+        CloudFireStore.getInstance().collection("posts")
+                .document(Authentication.getUserID() + "-" + (int) postID)
+                .collection("replies").document("reply_counter").set(counter);
     }
 
     private void msg(boolean isSucceeded) {
