@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -39,6 +40,7 @@ public class Post extends AppCompatActivity {
         setContentView(R.layout.activity_post);
         setPost();
         reply = findViewById(R.id.replyContent);
+        ((TextView) findViewById(R.id.postContent)).setMovementMethod(new ScrollingMovementMethod());
 
        post.getPost().getReference().collection("replies").document("reply_counter").get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
