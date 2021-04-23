@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.TimeZone;
 
 public class Post implements Comparable {
-    private String title, content, author;
+    private String title, content, username;
     private long date;
     private Image img;
     private ArrayList<Reply> replies;
@@ -25,11 +25,11 @@ public class Post implements Comparable {
         try {
             title = (String) doc.get("title");
             content = (String) doc.get("content");
-            author = (String) doc.get("email");
+            username = ((String) doc.get("email")).split("@")[0];
             date = (long) doc.get("date");
             replies = new ArrayList<>();
             post = doc;
-            id = (int) doc.get("postID");
+            id = doc.getDouble("postID").intValue();
             setReplies();
         } catch (Exception e) {
         }
@@ -47,7 +47,7 @@ public class Post implements Comparable {
     }
 
     public String getAuthor() {
-        return author;
+        return username;
     }
 
     public long getDate() {
@@ -76,17 +76,15 @@ public class Post implements Comparable {
         return replies;
     }
 
-    public void addReply(Reply r) {
-        replies.add(r);
-    }
-
-    private void setReplies() {
-        post.getReference().collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void setReplies() {
+        replies.removeAll(replies); // clear the list
+        post.getReference().collection("replies").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) // iterate over the replies
                     for (DocumentSnapshot reply : task.getResult())
-                        replies.add(new Reply(reply));
+                        if(!reply.getReference().getPath().contains("reply_counter")) // if it's a reply and not the counter
+                             replies.add(new Reply(reply));
             }
         });
     }

@@ -38,21 +38,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void Update() {
         if (getCurrentUser() != null) {
-            ((Button) findViewById(R.id.goto_sign_in)).setVisibility(View.GONE);
-            ((Button) findViewById(R.id.goto_sign_up)).setVisibility(View.GONE);
-            ((Button) findViewById(R.id.goto_sign_out)).setVisibility(View.VISIBLE);
-            ((Button) findViewById(R.id.goto_my_posts)).setVisibility(View.VISIBLE);
-            ((Button) findViewById(R.id.goto_new_post)).setVisibility(View.VISIBLE);
-            TextView user = (TextView) findViewById(R.id.user);
+            (findViewById(R.id.goto_sign_in)).setVisibility(View.GONE);
+            (findViewById(R.id.goto_sign_up)).setVisibility(View.GONE);
+            (findViewById(R.id.goto_sign_out)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.goto_my_posts)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.goto_new_post)).setVisibility(View.VISIBLE);
+            TextView user = findViewById(R.id.user);
             user.setVisibility(View.VISIBLE);
             user.setText(getCurrentUser().getEmail().split("@")[0]);
         } else {
-            ((Button) findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
-            ((Button) findViewById(R.id.goto_sign_up)).setVisibility(View.VISIBLE);
-            ((Button) findViewById(R.id.goto_sign_out)).setVisibility(View.GONE);
-            ((Button) findViewById(R.id.goto_my_posts)).setVisibility(View.GONE);
-            ((Button) findViewById(R.id.goto_new_post)).setVisibility(View.GONE);
-            ((TextView) findViewById(R.id.user)).setVisibility(View.GONE);
+            (findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.goto_sign_up)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.goto_sign_out)).setVisibility(View.GONE);
+            (findViewById(R.id.goto_my_posts)).setVisibility(View.GONE);
+            (findViewById(R.id.goto_new_post)).setVisibility(View.GONE);
+            (findViewById(R.id.user)).setVisibility(View.GONE);
         }
     }
 

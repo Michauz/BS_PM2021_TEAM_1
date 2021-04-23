@@ -25,7 +25,6 @@ import Adapters.Post;
 import app.msda.qna.R;
 
 public class MyPosts extends AppCompatActivity {
-    private CloudFireStore db;
     private ArrayList<Post> posts;
 
     @Override
@@ -37,7 +36,7 @@ public class MyPosts extends AppCompatActivity {
     }
 
     private void getPosts(){
-        db.getInstance().collection("posts")
+        CloudFireStore.getInstance().collection("posts")
                 .whereEqualTo("email", Authentication.getCurrentUser().getEmail())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -88,9 +87,6 @@ public class MyPosts extends AppCompatActivity {
         startActivity(new Intent(this, UI.Forum.Post.class));
     }
 
-    public CloudFireStore getDB() {
-        return db;
-    }
     public ArrayList getMyPostsList()
     {
         return posts;

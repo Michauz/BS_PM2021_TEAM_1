@@ -8,8 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import app.msda.qna.R;
 
@@ -28,16 +30,23 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.reply, null, true);
 
-        TextView username = (TextView) rowView.findViewById(R.id.title);
-        TextView date = (TextView) rowView.findViewById(R.id.title);
-        ImageView image = (ImageView) rowView.findViewById(R.id.icon);
-        TextView content = (TextView) rowView.findViewById(R.id.content);
+        TextView username = rowView.findViewById(R.id.username);
+        TextView date = rowView.findViewById(R.id.date);
+        ImageView image = rowView.findViewById(R.id.icon);
+        TextView content = rowView.findViewById(R.id.content);
 
         username.setText(replies.get(position).getUsername());
-        date.setText(replies.get(position).getDate().toString());
+        date.setText(getDateToString(replies.get(position).getDate()));
        // image.setImageResource(replies.get(position).getImg());
         content.setText(replies.get(position).getContent());
 
         return rowView;
     }
+
+    private String getDateToString(long date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Israel"));
+        return dateFormat.format(date);
+    }
+
 }

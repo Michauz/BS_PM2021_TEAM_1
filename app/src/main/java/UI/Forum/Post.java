@@ -40,23 +40,20 @@ public class Post extends AppCompatActivity {
         setPost();
         reply = findViewById(R.id.replyContent);
 
-        CloudFireStore.getInstance().collection("posts")
-                .document(Authentication.getUserID() + "-" + post.getId())
-                .collection("replies").document("reply_counter").get()
+       post.getPost().getReference().collection("replies").document("reply_counter").get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) // get the reply ID from DB
-                                replyID = (int) document.get("counter");
+                                replyID = document.getDouble("counter").intValue();
                         }
                     }
                 });
 
-        Reply_ListAdapter adapter = new Reply_ListAdapter(this, post.getReplies());
-        list = (ListView) findViewById(R.id.postReplies);
-        list.setAdapter(adapter);
+        list = findViewById(R.id.postReplies);
+        list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));
     }
 
     private void setPost() {
@@ -75,28 +72,26 @@ public class Post extends AppCompatActivity {
         Map<String, Object> reply = new HashMap<>();
         reply.put("username", post.getAuthor());
         reply.put("content", this.reply.getText().toString());
-        reply.put("ID", replyID);
+        reply.put("ID", ++replyID);
         reply.put("date", (new Date()).getTime());
         //reply.put("image", ...);
 
-        CloudFireStore.getInstance().collection("posts")
-                .document(Authentication.getUserID() + "-" + post.getId())
-                .collection("replies").document("reply " + replyID).set(reply)
+        post.getPost().getReference().collection("replies").document("reply " + replyID).set(reply)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         updateRepliesCounter();
+                        post.setReplies(); // update the replies list
                     }
                 });
+        list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));// update the list
     }
 
     private void updateRepliesCounter() {
         Map<String, Object> counter = new HashMap<>();
-        counter.put("counter", ++replyID);
+        counter.put("counter", replyID);
 
-        CloudFireStore.getInstance().collection("posts")
-                .document(Authentication.getUserID() + "-" + post.getId())
-                .collection("replies").document("reply_counter")
+        post.getPost().getReference().collection("replies").document("reply_counter")
                 .set(counter).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -108,9 +103,5 @@ public class Post extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
-    }
-
-    public static Adapters.Post getPost() {
-        return post;
     }
 }

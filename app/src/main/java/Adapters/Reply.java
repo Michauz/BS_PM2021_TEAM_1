@@ -4,19 +4,21 @@ import android.media.Image;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Reply {
     private String username, content;
-    private Date date;
+    private long date;
     private Image img;
     private int id;
 
     public Reply(DocumentSnapshot reply) {
         username = (String) reply.get("username");
         content = (String) reply.get("content");
-        date = (Date) reply.get("date");
-        id = (int) reply.get("ID");
+        date = (long) reply.get("date");
+        id = reply.getDouble("ID").intValue();
         /*
         Insert Image processing code here.
          */
@@ -30,7 +32,7 @@ public class Reply {
         return content;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
@@ -40,6 +42,12 @@ public class Reply {
 
     public int getId() {
         return id;
+    }
+
+    public String getDateToString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Israel"));
+        return dateFormat.format(date);
     }
 
 }
