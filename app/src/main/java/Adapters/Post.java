@@ -68,7 +68,7 @@ public class Post implements Comparable {
         return post;
     }
 
-    public int getId() {
+    public int getPostID() {
         return id;
     }
 

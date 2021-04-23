@@ -3,10 +3,13 @@ package UI.Forum;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +19,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +29,7 @@ import java.util.TimeZone;
 
 import Adapters.Authentication;
 import Adapters.CloudFireStore;
+import Adapters.FireBaseStorage;
 import Adapters.Reply_ListAdapter;
 import app.msda.qna.R;
 
@@ -32,6 +37,7 @@ public class Post extends AppCompatActivity {
     public static Adapters.Post post;
     private EditText reply;
     private int replyID;
+    private ImageView postImage;
     private ListView list;
 
     @Override
@@ -40,6 +46,7 @@ public class Post extends AppCompatActivity {
         setContentView(R.layout.activity_post);
         setPost();
         reply = findViewById(R.id.replyContent);
+        postImage=findViewById(R.id.postImg);
         ((TextView) findViewById(R.id.postContent)).setMovementMethod(new ScrollingMovementMethod());
 
        post.getPost().getReference().collection("replies").document("reply_counter").get()
@@ -54,8 +61,21 @@ public class Post extends AppCompatActivity {
                     }
                 });
 
+       setPostImage();
+
         list = findViewById(R.id.postReplies);
         list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));
+    }
+
+    private void setPostImage() {
+       FireBaseStorage.getInstance().getReference().child(post.getPostID()+".jpg")
+               .getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+           @Override
+           public void onSuccess(byte[] bytes) {
+               Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+               postImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, postImage.getWidth(), postImage.getHeight(), false));
+           }
+       });
     }
 
     private void setPost() {
