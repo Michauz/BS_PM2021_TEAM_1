@@ -16,8 +16,8 @@
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="#2196F3"
-        android:textStyle="bold"
         android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,11 +28,11 @@
         android:id="@+id/postContent"
         android:layout_width="250dp"
         android:layout_height="80dp"
-        android:scrollbars="vertical"
         android:layout_marginStart="35dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="35dp"
         android:background="@drawable/listview_itemborder"
+        android:scrollbars="vertical"
         android:text="TextView"
         android:textColor="#000000"
         android:textSize="17dp"
@@ -43,29 +43,29 @@
 
     <TextView
         android:id="@+id/postAuthor"
-        android:gravity="start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="16dp"
+        android:gravity="start"
         android:text="TextView"
         android:textColor="#CC1010"
-        android:textStyle="bold"
         android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/postTitle" />
 
     <TextView
         android:id="@+id/postDate"
-        android:text="TextView"
-        android:gravity="end"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="35dp"
+        android:gravity="end"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/postTitle" />
 
@@ -84,8 +84,8 @@
 
     <LinearLayout
         android:id="@+id/newReply"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="391dp"
+        android:layout_height="99dp"
         android:layout_marginStart="35dp"
         android:layout_marginEnd="35dp"
         android:layout_marginBottom="16dp"
@@ -106,6 +106,14 @@
             android:textColor="#000000" />
 
         <Button
+            android:id="@+id/addImage"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="addReplyImage"
+            android:text="add Image" />
+
+        <Button
             android:id="@+id/postReply"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -118,12 +126,12 @@
         android:id="@+id/postImg"
         android:layout_width="100dp"
         android:layout_height="90dp"
-        android:layout_marginBottom="490dp"
         android:layout_marginEnd="0dp"
-        app:srcCompat="@drawable/question"
+        android:layout_marginBottom="490dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="@+id/content" />
+        app:layout_constraintRight_toRightOf="@+id/content"
+        app:layout_constraintTop_toBottomOf="@+id/date"
+        app:srcCompat="@drawable/question" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,14 +1,22 @@
 package Adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,9 +24,9 @@ import com.ceylonlabs.imageviewpopup.ImagePopup;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.TimeZone;
 
+import UI.Forum.Post;
 import app.msda.qna.R;
 
 public class Reply_ListAdapter extends ArrayAdapter<Reply> {
@@ -50,14 +58,16 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
             Bitmap bmp = BitmapFactory.decodeByteArray(replies.get(position).getReplyImage(), 0, replies.get(position).getReplyImage().length);
             replyImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, (int) rowView.getResources().getDimension(R.dimen.image_width), (int) rowView.getResources().getDimension(R.dimen.image_height), false));
 
-            final ImagePopup imagePopup = new ImagePopup(context);
             replyImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     /** Initiate Popup view **/
-                    imagePopup.initiatePopup(replyImage.getDrawable());
+                    final ImagePopup imagePopup = new ImagePopup(context);
+                    imagePopup.initiatePopup(replyImage.getDrawable()); // Load Image from Drawable
+                    imagePopup.viewPopup(); // view popup of the image
                 }
             });
+            date.setTextSize(13);
         } else {
             final float scale = getContext().getResources().getDisplayMetrics().density;
             int pixels = (int) (323 * scale + 0.5f);
@@ -75,6 +85,4 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
         dateFormat.setTimeZone(TimeZone.getTimeZone("Israel"));
         return dateFormat.format(date);
     }
-
-
 }

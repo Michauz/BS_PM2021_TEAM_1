@@ -4,24 +4,35 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ceylonlabs.imageviewpopup.ImagePopup;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +42,7 @@ import java.util.TimeZone;
 import Adapters.Authentication;
 import Adapters.CloudFireStore;
 import Adapters.FireBaseStorage;
+import Adapters.Permissions;
 import Adapters.Reply_ListAdapter;
 import app.msda.qna.R;
 
@@ -40,17 +52,21 @@ public class Post extends AppCompatActivity {
     private int replyID;
     private ImageView postImage;
     private ListView list;
+    private final int CAMERA_REQUEST = 1888, REQUEST_CODE = 1;
+    private Bitmap image;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+        context = this;
         setPost();
         reply = findViewById(R.id.replyContent);
-        postImage=findViewById(R.id.postImg);
+        postImage = findViewById(R.id.postImg);
         ((TextView) findViewById(R.id.postContent)).setMovementMethod(new ScrollingMovementMethod());
 
-       post.getPost().getReference().collection("replies").document("reply_counter").get()
+        post.getPost().getReference().collection("replies").document("reply_counter").get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -62,31 +78,41 @@ public class Post extends AppCompatActivity {
                     }
                 });
 
-       setPostImage();
+        setPostImage();
 
         list = findViewById(R.id.postReplies);
         list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));
     }
 
     private void setPostImage() {
-       FireBaseStorage.getInstance().getReference().child(post.getPostID()+".jpg")
-               .getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-           @Override
-           public void onSuccess(byte[] bytes) {
-               Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-               postImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, postImage.getWidth(), postImage.getHeight(), false));
-           }
-       }).addOnFailureListener(new OnFailureListener() {
-           @Override
-           public void onFailure(@NonNull Exception e) {
-               postImage.getLayoutParams().width=0;
-               postImage.getLayoutParams().height=0;
+        FireBaseStorage.getInstance().getReference().child(post.getPostID() + ".jpg")
+                .getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                postImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, postImage.getWidth(), postImage.getHeight(), false));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                postImage.getLayoutParams().width = 0;
+                postImage.getLayoutParams().height = 0;
 
-               ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams)  ((TextView) findViewById(R.id.postContent)).getLayoutParams();
-               params.width = 888;
-               ((TextView) findViewById(R.id.postContent)).setLayoutParams(params);
-           }
-       });
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) ((TextView) findViewById(R.id.postContent)).getLayoutParams();
+                params.width = 888;
+                ((TextView) findViewById(R.id.postContent)).setLayoutParams(params);
+            }
+        });
+
+        postImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ImagePopup imagePopup = new ImagePopup(context);
+                imagePopup.initiatePopup(postImage.getDrawable()); // Load Image from Drawable
+                imagePopup.viewPopup(); // view popup of the image
+            }
+        });
+
     }
 
     private void setPost() {
@@ -107,7 +133,6 @@ public class Post extends AppCompatActivity {
         reply.put("content", this.reply.getText().toString());
         reply.put("ID", ++replyID);
         reply.put("date", (new Date()).getTime());
-        //reply.put("image", ...);
 
         post.getPost().getReference().collection("replies").document("reply " + replyID).set(reply)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -117,7 +142,34 @@ public class Post extends AppCompatActivity {
                         post.setReplies(); // update the replies list
                     }
                 });
-        list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));// update the list
+
+        // upload the image if exist
+        if (image == null) {
+            finish();
+            return;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference mountainsRef = FireBaseStorage.getInstance()
+                .getReference().child(post.getPostID() + "_" + replyID + ".jpg");
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+        finish();
     }
 
     private void updateRepliesCounter() {
@@ -136,5 +188,41 @@ public class Post extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
+    }
+
+    public void addReplyImage(View view) {
+        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        } else {
+            Toast.makeText(this, "Camera permission not granted.", Toast.LENGTH_LONG).show();
+            Permissions.askForCameraPerm(this);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            image = (Bitmap) data.getExtras().get("data");
+            Toast.makeText(this, "Photo has been taken successful!", Toast.LENGTH_SHORT);
+            ((Button) findViewById(R.id.addImage)).setText("Image Added");
+            ((Button) findViewById(R.id.addImage)).setBackgroundColor(Color.GREEN);
+        } else
+            Toast.makeText(this, "Camera permission not granted.", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE)
+            // output for user (to inform him if the permission is granted or denied)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT);
+
     }
 }

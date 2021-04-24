@@ -38,7 +38,7 @@ import Adapters.Permissions;
 import app.msda.qna.R;
 
 public class UploadPost extends AppCompatActivity {
-    private static final int CAMERA_REQUEST = 1888, REQUEST_CODE = 1;
+    private final int CAMERA_REQUEST = 1888, REQUEST_CODE = 1;
     private ImageView image;
     private EditText title, content;
     private boolean photoTaken;
@@ -125,7 +125,6 @@ public class UploadPost extends AppCompatActivity {
             Toast.makeText(this, "Camera permission not granted.", Toast.LENGTH_LONG).show();
             Permissions.askForCameraPerm(this);
         }
-
     }
 
     @Override
@@ -138,7 +137,6 @@ public class UploadPost extends AppCompatActivity {
             photoTaken = true;
         } else
             Toast.makeText(this, "Camera permission not granted.", Toast.LENGTH_LONG).show();
-
     }
 
     @Override

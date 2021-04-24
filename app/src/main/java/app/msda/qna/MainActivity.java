@@ -71,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
         Update();
     }
 
-    public void MyPosts(View view){
+    public void MyPosts(View view) {
         startActivity(new Intent(this, MyPosts.class));
         Update();
     }
 
-    public void NewPost(View view){
+    public void NewPost(View view) {
         startActivity(new Intent(this, UploadPost.class));
         Update();
     }
@@ -85,11 +85,14 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == REQUEST_CODE)
-            // output for user (to inform him if the permission is granted or denied)
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT);
+        try {
+            if (requestCode == REQUEST_CODE)
+                // output for user (to inform him if the permission is granted or denied)
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT);
+        } catch (Exception e) {
+        }
     }
 }
