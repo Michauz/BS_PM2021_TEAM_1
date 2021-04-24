@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ceylonlabs.imageviewpopup.ImagePopup;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,15 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
         if (replies.get(position).getReplyImage() != null) {
             Bitmap bmp = BitmapFactory.decodeByteArray(replies.get(position).getReplyImage(), 0, replies.get(position).getReplyImage().length);
             replyImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, (int) rowView.getResources().getDimension(R.dimen.image_width), (int) rowView.getResources().getDimension(R.dimen.image_height), false));
+
+            final ImagePopup imagePopup = new ImagePopup(context);
+            replyImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /** Initiate Popup view **/
+                    imagePopup.initiatePopup(replyImage.getDrawable());
+                }
+            });
         } else {
             final float scale = getContext().getResources().getDisplayMetrics().density;
             int pixels = (int) (323 * scale + 0.5f);

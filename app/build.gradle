@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    compile 'com.github.chathuralakmal:AndroidImagePopup:1.2.2'
     implementation 'com.google.firebase:firebase-auth'
 
     // Import the BoM for the Firebase platform
