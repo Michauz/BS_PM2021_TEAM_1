@@ -16,7 +16,6 @@ import java.util.TimeZone;
 public class Post implements Comparable {
     private String title, content, username;
     private long date;
-    private Image img;
     private ArrayList<Reply> replies;
     private DocumentSnapshot post;
     private int id;
@@ -60,10 +59,6 @@ public class Post implements Comparable {
         return dateFormat.format(date);
     }
 
-    public Image getImg() {
-        return img;
-    }
-
     public DocumentSnapshot getPost() {
         return post;
     }
@@ -84,7 +79,7 @@ public class Post implements Comparable {
                 if (task.isSuccessful()) // iterate over the replies
                     for (DocumentSnapshot reply : task.getResult())
                         if(!reply.getReference().getPath().contains("reply_counter")) // if it's a reply and not the counter
-                             replies.add(new Reply(reply));
+                             replies.add(new Reply(reply, id));
             }
         });
     }

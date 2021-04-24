@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/listview_itemborder"
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:layout_width="302dp"
+        android:layout_width="250dp"
         android:layout_height="114dp"
+        android:id="@+id/box"
         android:background="@drawable/listview_itemborder">
 
         <TextView
@@ -30,9 +31,9 @@
             android:layout_marginLeft="170dp"
             android:padding="2dp"
             android:text=""
-            android:textSize="17dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#000000"
+            android:textSize="17dp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -46,15 +47,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="87dp"
                 android:text=""
-                android:textSize="17dp"
-                android:textColor="#000000" />
+                android:scrollbars="vertical"
+                android:textColor="#000000"
+                android:textSize="17dp" />
         </LinearLayout>
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/icon"
-        android:layout_width="106dp"
-        android:layout_height="114dp"
-        android:layout_marginEnd="5dp"
-        android:padding="10dp" />
+        android:id="@+id/replyIMG"
+        android:layout_width="80dp"
+        android:layout_height="95dp"
+        android:layout_marginEnd="6dp"
+        android:padding="5dp" />
 </LinearLayout>

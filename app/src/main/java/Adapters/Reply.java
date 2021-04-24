@@ -1,8 +1,17 @@
 package Adapters;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,17 +20,42 @@ import java.util.TimeZone;
 public class Reply {
     private String username, content;
     private long date;
-    private Image img;
-    private int id;
+    private byte[] replyImage;
+    private int replyID, postID;
 
-    public Reply(DocumentSnapshot reply) {
+    public Reply(DocumentSnapshot reply, int postID) {
         username = (String) reply.get("username");
         content = (String) reply.get("content");
         date = (long) reply.get("date");
-        id = reply.getDouble("ID").intValue();
-        /*
-        Insert Image processing code here.
-         */
+        replyID = reply.getDouble("ID").intValue();
+        this.postID = postID;
+        setImg();
+    }
+
+    private void setImg() {
+        FireBaseStorage.getInstance().getReference().listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+            @Override
+            public void onSuccess(ListResult result) { // LOADING SCREEN ???
+                for (StorageReference fileRef : result.getItems())
+                    if (fileRef.getName().equals(postID + "_" + replyID + ".jpg"))
+                        fileRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                                replyImage = bytes;
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                replyImage = null;
+                            }
+                        });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(Exception exception) {
+                // Handle any errors
+            }
+        });
     }
 
     public String getUsername() {
@@ -36,18 +70,7 @@ public class Reply {
         return date;
     }
 
-    public Image getImg() {
-        return img;
+    public byte[] getReplyImage() {
+        return replyImage;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDateToString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("Israel"));
-        return dateFormat.format(date);
-    }
-
 }

@@ -2,6 +2,7 @@ package UI.Forum;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -74,6 +75,16 @@ public class Post extends AppCompatActivity {
            public void onSuccess(byte[] bytes) {
                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                postImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, postImage.getWidth(), postImage.getHeight(), false));
+           }
+       }).addOnFailureListener(new OnFailureListener() {
+           @Override
+           public void onFailure(@NonNull Exception e) {
+               postImage.getLayoutParams().width=0;
+               postImage.getLayoutParams().height=0;
+
+               ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams)  ((TextView) findViewById(R.id.postContent)).getLayoutParams();
+               params.width = 888;
+               ((TextView) findViewById(R.id.postContent)).setLayoutParams(params);
            }
        });
     }

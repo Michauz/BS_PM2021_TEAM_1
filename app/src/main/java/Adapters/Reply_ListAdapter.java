@@ -1,11 +1,15 @@
 package Adapters;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +26,7 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
     public Reply_ListAdapter(Activity context, ArrayList<Reply> replies) {
         super(context, R.layout.reply, replies);
         this.context = context;
-        this.replies=replies;
+        this.replies = replies;
     }
 
     @Override
@@ -32,13 +36,25 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
 
         TextView username = rowView.findViewById(R.id.username);
         TextView date = rowView.findViewById(R.id.date);
-        ImageView image = rowView.findViewById(R.id.icon);
+        ImageView replyImage = rowView.findViewById(R.id.replyIMG);
         TextView content = rowView.findViewById(R.id.content);
 
         username.setText(replies.get(position).getUsername());
         date.setText(getDateToString(replies.get(position).getDate()));
-       // image.setImageResource(replies.get(position).getImg());
         content.setText(replies.get(position).getContent());
+        content.setMovementMethod(new ScrollingMovementMethod());
+
+        if (replies.get(position).getReplyImage() != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(replies.get(position).getReplyImage(), 0, replies.get(position).getReplyImage().length);
+            replyImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, (int) rowView.getResources().getDimension(R.dimen.image_width), (int) rowView.getResources().getDimension(R.dimen.image_height), false));
+        } else {
+            final float scale = getContext().getResources().getDisplayMetrics().density;
+            int pixels = (int) (323 * scale + 0.5f);
+            ((RelativeLayout) (rowView.findViewById(R.id.box))).getLayoutParams().width = pixels;
+            replyImage.getLayoutParams().height = 0;
+            replyImage.getLayoutParams().width = 0;
+            replyImage.requestLayout();
+        }
 
         return rowView;
     }
@@ -48,5 +64,6 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
         dateFormat.setTimeZone(TimeZone.getTimeZone("Israel"));
         return dateFormat.format(date);
     }
+
 
 }
