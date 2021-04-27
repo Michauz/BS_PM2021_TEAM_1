@@ -19,4 +19,7 @@
     </style>
     <style name="Theme.QnA.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.QnA.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.FullBackground" parent="Theme.AppCompat.CustomTheme">
+        <item name="android:background">@drawable/background</item>
+    </style>
 </resources>

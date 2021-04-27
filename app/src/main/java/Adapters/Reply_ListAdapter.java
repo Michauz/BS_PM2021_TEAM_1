@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import java.util.TimeZone;
 
 import UI.Forum.Post;
 import app.msda.qna.R;
+
+import static android.graphics.Typeface.BOLD;
 
 public class Reply_ListAdapter extends ArrayAdapter<Reply> {
     private final Activity context;
@@ -67,7 +70,7 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
                     imagePopup.viewPopup(); // view popup of the image
                 }
             });
-            date.setTextSize(13);
+            date.setTextSize(11);
         } else {
             final float scale = getContext().getResources().getDisplayMetrics().density;
             int pixels = (int) (323 * scale + 0.5f);

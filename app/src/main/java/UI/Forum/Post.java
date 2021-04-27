@@ -33,14 +33,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
-import Adapters.Authentication;
-import Adapters.CloudFireStore;
 import Adapters.FireBaseStorage;
 import Adapters.Permissions;
 import Adapters.Reply_ListAdapter;
