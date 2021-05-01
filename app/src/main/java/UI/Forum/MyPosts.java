@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -24,15 +24,29 @@ import Adapters.CloudFireStore;
 import Adapters.Post;
 import app.msda.qna.R;
 
+import static Adapters.Authentication.getCurrentUser;
+
 public class MyPosts extends AppCompatActivity {
-    private ArrayList<Post> posts;
+    private ArrayList<Post> posts, replies;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_posts);
         posts = new ArrayList<>();
+        replies = new ArrayList<>();
         getPosts();
+        ((RadioButton)findViewById(R.id.posts)).setChecked(true);
+        ((RadioGroup)findViewById(R.id.postsORreplies)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(((RadioButton)findViewById(R.id.posts)).isChecked())
+                        listOfPosts(posts);
+                else
+                        listOfPosts(replies);
+            }
+        });
     }
 
     private void getPosts(){
@@ -46,7 +60,33 @@ public class MyPosts extends AppCompatActivity {
                         posts.add(new Post(document));
                     }
                     posts.sort(null);
-                    listOfPosts();
+                    listOfPosts(posts);
+                } else {
+                    finish();
+                }
+            }
+        });
+        CloudFireStore.getInstance().collection("posts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        document.getReference().collection("replies").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot reply:task.getResult()){
+                                        if(!reply.getId().equals("reply_counter") && reply.get("username").toString().equals(getCurrentUser().getEmail().split("@")[0])){
+                                            replies.add(new Post(document));
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    replies.sort(null);
                 } else {
                     finish();
                 }
@@ -54,7 +94,8 @@ public class MyPosts extends AppCompatActivity {
         });
     }
 
-    private void listOfPosts(){
+    private void listOfPosts(ArrayList<Post> posts){
+        ((LinearLayout)findViewById(R.id.insideScroll)).removeAllViews();
         for(int i=0;i<posts.size();i++){
             //Params var for all views.
             RelativeLayout.LayoutParams params;

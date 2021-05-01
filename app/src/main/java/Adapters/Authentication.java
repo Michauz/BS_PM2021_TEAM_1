@@ -67,6 +67,7 @@ public class Authentication {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(activity, "Logged in successfully", Toast.LENGTH_LONG).show();
+                            activity.finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(activity, "Couldn't login", Toast.LENGTH_SHORT).show();

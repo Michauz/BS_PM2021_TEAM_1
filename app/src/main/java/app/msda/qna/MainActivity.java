@@ -2,6 +2,8 @@ package app.msda.qna;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 
 import android.content.Intent;
@@ -9,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +20,7 @@ import Adapters.Authentication;
 import Adapters.CloudFireStore;
 import Adapters.Post;
 import UI.Admin.AdminActivity;
+import UI.Forum.Forum;
 import UI.Forum.MyPosts;
 import UI.Forum.UploadPost;
 import UI.LoginActivity;
@@ -30,8 +35,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.rpc.context.AttributeContext;
 
 import java.util.ArrayList;
 
@@ -55,38 +62,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buttonsUpdate(){
+        (findViewById(R.id.goto_admin)).setVisibility(View.GONE);
         if (getCurrentUser() != null) {
+            CloudFireStore.getInstance().collection("users").document(Authentication.getCurrentUser().getEmail()).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists() && document.getLong("permission")==2) // get the reply ID from DB
+                                    (findViewById(R.id.goto_admin)).setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
             (findViewById(R.id.goto_sign_in)).setVisibility(View.GONE);
             (findViewById(R.id.goto_sign_up)).setVisibility(View.GONE);
             (findViewById(R.id.goto_sign_out)).setVisibility(View.VISIBLE);
             (findViewById(R.id.goto_my_posts)).setVisibility(View.VISIBLE);
-            (findViewById(R.id.goto_new_post)).setVisibility(View.VISIBLE);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone((ConstraintLayout) findViewById(R.id.main));
+            constraintSet.connect(R.id.ForumListScroll,ConstraintSet.TOP,R.id.goto_sign_out,ConstraintSet.BOTTOM,16);
+            constraintSet.applyTo(findViewById(R.id.main));
             TextView user = findViewById(R.id.user);
             user.setVisibility(View.VISIBLE);
-            user.setText(getCurrentUser().getEmail().split("@")[0]);
+            user.setText("Hey "+getCurrentUser().getEmail().split("@")[0]);
         } else {
             (findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
             (findViewById(R.id.goto_sign_up)).setVisibility(View.VISIBLE);
             (findViewById(R.id.goto_sign_out)).setVisibility(View.GONE);
             (findViewById(R.id.goto_my_posts)).setVisibility(View.GONE);
-            (findViewById(R.id.goto_new_post)).setVisibility(View.GONE);
             (findViewById(R.id.user)).setVisibility(View.GONE);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone((ConstraintLayout) findViewById(R.id.main));
+            constraintSet.connect(R.id.ForumListScroll,ConstraintSet.TOP,R.id.goto_sign_in,ConstraintSet.BOTTOM,16);
+            constraintSet.applyTo(findViewById(R.id.main));
         }
     }
 
     private void forumUpdate(){
         if (getCurrentUser() != null){
             CloudFireStore.getInstance().collection("users")
-                    .whereEqualTo("email", Authentication.getCurrentUser().getEmail())
-                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    .document(Authentication.getCurrentUser().getEmail())
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            addForums((ArrayList<String>) document.get("forums"));
+                        DocumentSnapshot doc = task.getResult();
+                        if (doc.exists()) {
+                            ArrayList<String> forums = (ArrayList<String>) doc.get("subjects");
+                            addForums(forums);
                         }
-                    } else {
-
                     }
                 }
             });
@@ -94,15 +119,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addForums(ArrayList<String> forums){
-        ArrayList<RelativeLayout> lines = new ArrayList<>();
+        ((LinearLayout)findViewById(R.id.ForumList)).removeAllViews();
+        ArrayList<LinearLayout> lines = new ArrayList<>();
         //Params var for all views.
         RelativeLayout.LayoutParams params;
-        for(int i=0;i<forums.size()/3;i++) {
-            RelativeLayout newline = new RelativeLayout(this);
+        for(int i=0;i<forums.size()/3+1;i++) {
+            LinearLayout newline = new LinearLayout(this);
             params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            newline.setOrientation(LinearLayout.HORIZONTAL);
             newline.setLayoutParams(params);
             lines.add(newline);
         }
+        for(int i=0;i<forums.size();i++){
+            Button forum = new Button(this);
+            forum.setText(forums.get(i));
+            forum.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Forum.forumName = ((Button)v).getText().toString();
+                    Forum();
+                }
+            });
+            params = new RelativeLayout.LayoutParams(((LinearLayout)findViewById(R.id.ForumList)).getWidth()/3, ((LinearLayout)findViewById(R.id.ForumList)).getWidth()/3);
+            lines.get(i/3).addView(forum,params);
+        }
+        for(LinearLayout line:lines)
+            ((LinearLayout)findViewById(R.id.ForumList)).addView(line);
         /*//Button as post
         Button post = new Button(this);
         post.setId(i);
@@ -148,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
         Update();
     }
 
-    public void NewPost(View view){
-        startActivity(new Intent(this, UploadPost.class));
+    public void Forum(){
+        startActivity(new Intent(this, Forum.class));
         Update();
     }
 

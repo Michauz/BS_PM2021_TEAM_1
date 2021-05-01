@@ -53,7 +53,7 @@ public class Post extends AppCompatActivity {
                 });
 
         list = findViewById(R.id.postReplies);
-        list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));
+        updateList();
     }
 
     private void setPost() {
@@ -82,8 +82,12 @@ public class Post extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         updateRepliesCounter();
                         post.setReplies(); // update the replies list
+                        updateList();// update the list
                     }
                 });
+    }
+
+    private void updateList(){
         list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));// update the list
     }
 
