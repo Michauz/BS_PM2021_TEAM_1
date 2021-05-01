@@ -11,11 +11,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import Adapters.Authentication;
 import app.msda.qna.R;
 
 import static Adapters.Authentication.getCurrentUser;
 import static Adapters.Authentication.signIn_Email_Password;
 import static Adapters.Authentication.signUp_Email_Password;
+import static Adapters.CloudFireStore.getInstance;
 
 public class SignUpActivity extends AppCompatActivity {
     private EditText email;
@@ -75,6 +86,9 @@ public class SignUpActivity extends AppCompatActivity {
         String email = ((EditText) findViewById(R.id.username)).getText().toString();
         String password = ((EditText) findViewById(R.id.password)).getText().toString();
         signUp_Email_Password(this,email,password);
+    }
+
+    public void update(){
         if(getCurrentUser()!=null)
             finish();
     }
