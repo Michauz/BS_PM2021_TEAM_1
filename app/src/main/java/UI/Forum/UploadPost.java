@@ -56,7 +56,7 @@ public class UploadPost extends AppCompatActivity {
 
         photoTaken = false;
 
-        CloudFireStore.getInstance().collection("post_counter").document("counter").get()
+        CloudFireStore.getInstance().collection("vars").document("counter").get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -160,7 +160,7 @@ public class UploadPost extends AppCompatActivity {
         Map<String, Object> counter = new HashMap<>();
         counter.put("counter", ++postID);
 
-        CloudFireStore.getInstance().collection("post_counter").document("counter")
+        CloudFireStore.getInstance().collection("vars").document("counter")
                 .set(counter).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
