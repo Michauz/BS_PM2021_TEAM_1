@@ -10,9 +10,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Theme.QnA">
-        <activity android:name="UI.Forum.Post"></activity>
+        <activity android:name="UI.Admin.UserEditActivity"></activity>
+        <activity android:name="UI.Admin.UserManagementActivity" />
+        <activity android:name="UI.Admin.AdminActivity" />
+        <activity android:name="UI.Forum.Forum" />
+        <activity android:name="UI.Forum.Post" />
         <activity android:name="UI.Forum.UploadPost" />
         <activity android:name="UI.Forum.MyPosts" />
         <activity android:name="UI.SignUpActivity" />

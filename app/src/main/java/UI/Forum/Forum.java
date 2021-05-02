@@ -8,9 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,34 +23,22 @@ import Adapters.CloudFireStore;
 import Adapters.Post;
 import app.msda.qna.R;
 
-import static Adapters.Authentication.getCurrentUser;
-
-public class MyPosts extends AppCompatActivity {
-    private ArrayList<Post> posts, replies;
-
+public class Forum extends AppCompatActivity {
+    static public String forumName;
+    private ArrayList<Post> posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_posts);
+        setContentView(R.layout.activity_forum);
         posts = new ArrayList<>();
-        replies = new ArrayList<>();
+        ((TextView)findViewById(R.id.forumName)).setText(forumName);
         getPosts();
-        ((RadioButton)findViewById(R.id.posts)).setChecked(true);
-        ((RadioGroup)findViewById(R.id.postsORreplies)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if(((RadioButton)findViewById(R.id.posts)).isChecked())
-                        listOfPosts(posts);
-                else
-                        listOfPosts(replies);
-            }
-        });
     }
 
     private void getPosts(){
         CloudFireStore.getInstance().collection("posts")
-                .whereEqualTo("email", Authentication.getCurrentUser().getEmail())
+                .whereEqualTo("forum", forumName)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -60,33 +47,7 @@ public class MyPosts extends AppCompatActivity {
                         posts.add(new Post(document));
                     }
                     posts.sort(null);
-                    listOfPosts(posts);
-                } else {
-                    finish();
-                }
-            }
-        });
-        CloudFireStore.getInstance().collection("posts")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        document.getReference().collection("replies").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()){
-                                    for(QueryDocumentSnapshot reply:task.getResult()){
-                                        if(!reply.getId().equals("reply_counter") && reply.get("username").toString().equals(getCurrentUser().getEmail().split("@")[0])){
-                                            replies.add(new Post(document));
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    replies.sort(null);
+                    listOfPosts();
                 } else {
                     finish();
                 }
@@ -94,8 +55,7 @@ public class MyPosts extends AppCompatActivity {
         });
     }
 
-    private void listOfPosts(ArrayList<Post> posts){
-        ((LinearLayout)findViewById(R.id.insideScroll)).removeAllViews();
+    private void listOfPosts(){
         for(int i=0;i<posts.size();i++){
             //Params var for all views.
             RelativeLayout.LayoutParams params;
@@ -120,12 +80,18 @@ public class MyPosts extends AppCompatActivity {
             params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_VERTICAL);
             newline.addView(post,params);
-            ((LinearLayout)findViewById(R.id.insideScroll)).addView(newline);
+            ((LinearLayout)findViewById(R.id.forumPosts)).addView(newline);
         }
     }
 
     private void goToPost(){
         startActivity(new Intent(this, UI.Forum.Post.class));
+    }
+
+    public void NewPost(View view){
+        UploadPost.forum = forumName;
+        startActivity(new Intent(this, UploadPost.class));
+        getPosts();
     }
 
     public ArrayList getMyPostsList()
