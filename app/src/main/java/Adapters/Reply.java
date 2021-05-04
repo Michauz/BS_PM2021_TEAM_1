@@ -24,12 +24,15 @@ public class Reply {
     private int replyID, postID;
 
     public Reply(DocumentSnapshot reply, int postID) {
-        username = (String) reply.get("username");
-        content = (String) reply.get("content");
-        date = (long) reply.get("date");
-        replyID = reply.getDouble("ID").intValue();
-        this.postID = postID;
-        setImg();
+        try {
+            username = (String) reply.get("username");
+            content = (String) reply.get("content");
+            date = (long) reply.get("date");
+            replyID = reply.getDouble("ID").intValue();
+            this.postID = postID;
+            setImg();
+        } catch (Exception e) {
+        }
     }
 
     private void setImg() {
