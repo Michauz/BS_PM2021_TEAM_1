@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import Adapters.Authentication;
 import Adapters.FireBaseStorage;
 import Adapters.Permissions;
 import Adapters.Reply_ListAdapter;
@@ -125,7 +126,7 @@ public class Post extends AppCompatActivity {
         }
 
         Map<String, Object> reply = new HashMap<>();
-        reply.put("username", post.getAuthor());
+        reply.put("username", Authentication.getCurrentUser().getEmail().split("@")[0]);
         reply.put("content", this.reply.getText().toString());
         reply.put("ID", ++replyID);
         reply.put("date", (new Date()).getTime());
