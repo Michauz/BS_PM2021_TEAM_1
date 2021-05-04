@@ -32,50 +32,53 @@ public class UserEditActivity extends AppCompatActivity {
         Update();
     }
 
-    public void newSubjectLine(DocumentSnapshot doc, String subject){
-        ArrayList<String> userSubjects = (ArrayList<String>) doc.get("subjects");
-        //Params var for all views.
-        RelativeLayout.LayoutParams params;
-        //New line of a pending supporter with settings.
-        LinearLayout newline = new LinearLayout(this);
-        newline.setOrientation(LinearLayout.HORIZONTAL);
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        newline.setLayoutParams(params);
-        //Button as post
-        ToggleButton subjectButton = new ToggleButton(this);
-        if(userSubjects.contains(subject))
-            subjectButton.setChecked(true);
-        else
-            subjectButton.setChecked(false);
-        subjectButton.setHint(subject);
-        newline.addView(subjectButton);
+    public void newSubjectLine(DocumentSnapshot doc, String subject) {
+        try {
+            ArrayList<String> userSubjects = (ArrayList<String>) doc.get("subjects");
+            //Params var for all views.
+            RelativeLayout.LayoutParams params;
+            //New line of a pending supporter with settings.
+            LinearLayout newline = new LinearLayout(this);
+            newline.setOrientation(LinearLayout.HORIZONTAL);
+            params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            newline.setLayoutParams(params);
+            //Button as post
+            ToggleButton subjectButton = new ToggleButton(this);
+            if (userSubjects.contains(subject))
+                subjectButton.setChecked(true);
+            else
+                subjectButton.setChecked(false);
+            subjectButton.setHint(subject);
+            newline.addView(subjectButton);
 
-        TextView subjectName = new TextView(this);
-        subjectName.setText(subject);
-        newline.addView(subjectName);
-        ((LinearLayout)findViewById(R.id.subjectList)).addView(newline);
+            TextView subjectName = new TextView(this);
+            subjectName.setText(subject);
+            newline.addView(subjectName);
+            ((LinearLayout) findViewById(R.id.subjectList)).addView(newline);
+        } catch (Exception e) {
+        }
     }
 
-    public void Submit(View view){
+    public void Submit(View view) {
         DocumentReference userDoc = CloudFireStore.getInstance().collection("users").document(email);
         int permission = 0;
-        if(((RadioButton)findViewById(R.id.radioButton1)).isChecked())  permission=0;
-        else if(((RadioButton)findViewById(R.id.radioButton2)).isChecked()) permission=1;
-        else if(((RadioButton)findViewById(R.id.radioButton3)).isChecked()) permission=2;
-        userDoc.update("permission",permission);
-        LinearLayout subjectList = (LinearLayout)findViewById(R.id.subjectList);
+        if (((RadioButton) findViewById(R.id.radioButton1)).isChecked()) permission = 0;
+        else if (((RadioButton) findViewById(R.id.radioButton2)).isChecked()) permission = 1;
+        else if (((RadioButton) findViewById(R.id.radioButton3)).isChecked()) permission = 2;
+        userDoc.update("permission", permission);
+        LinearLayout subjectList = (LinearLayout) findViewById(R.id.subjectList);
         ArrayList<String> subjects = new ArrayList<>();
-        for(int i=0;i<subjectList.getChildCount();i++){
-            if(((ToggleButton)((LinearLayout)subjectList.getChildAt(i)).getChildAt(0)).isChecked()){
-                    subjects.add(((ToggleButton)((LinearLayout)subjectList.getChildAt(i)).getChildAt(0)).getHint().toString());
+        for (int i = 0; i < subjectList.getChildCount(); i++) {
+            if (((ToggleButton) ((LinearLayout) subjectList.getChildAt(i)).getChildAt(0)).isChecked()) {
+                subjects.add(((ToggleButton) ((LinearLayout) subjectList.getChildAt(i)).getChildAt(0)).getHint().toString());
             }
         }
-        userDoc.update("subjects",subjects);
+        userDoc.update("subjects", subjects);
         finish();
     }
 
-    private void Update(){
-        ((TextView)findViewById(R.id.userName)).setText(email);
+    private void Update() {
+        ((TextView) findViewById(R.id.userName)).setText(email);
         CloudFireStore.getInstance().collection("users").document(email).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -83,21 +86,21 @@ public class UserEditActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) { // get the reply ID from DB
-                                switch (document.getLong("permission").intValue()){
+                                switch (document.getLong("permission").intValue()) {
                                     case 0:
-                                        ((RadioButton)findViewById(R.id.radioButton1)).setChecked(true);
-                                        ((RadioButton)findViewById(R.id.radioButton2)).setChecked(false);
-                                        ((RadioButton)findViewById(R.id.radioButton3)).setChecked(false);
+                                        ((RadioButton) findViewById(R.id.radioButton1)).setChecked(true);
+                                        ((RadioButton) findViewById(R.id.radioButton2)).setChecked(false);
+                                        ((RadioButton) findViewById(R.id.radioButton3)).setChecked(false);
                                         break;
                                     case 1:
-                                        ((RadioButton)findViewById(R.id.radioButton1)).setChecked(false);
-                                        ((RadioButton)findViewById(R.id.radioButton2)).setChecked(true);
-                                        ((RadioButton)findViewById(R.id.radioButton3)).setChecked(false);
+                                        ((RadioButton) findViewById(R.id.radioButton1)).setChecked(false);
+                                        ((RadioButton) findViewById(R.id.radioButton2)).setChecked(true);
+                                        ((RadioButton) findViewById(R.id.radioButton3)).setChecked(false);
                                         break;
                                     case 2:
-                                        ((RadioButton)findViewById(R.id.radioButton1)).setChecked(false);
-                                        ((RadioButton)findViewById(R.id.radioButton2)).setChecked(false);
-                                        ((RadioButton)findViewById(R.id.radioButton3)).setChecked(true);
+                                        ((RadioButton) findViewById(R.id.radioButton1)).setChecked(false);
+                                        ((RadioButton) findViewById(R.id.radioButton2)).setChecked(false);
+                                        ((RadioButton) findViewById(R.id.radioButton3)).setChecked(true);
                                         break;
                                 }
                                 CloudFireStore.getInstance().collection("vars").document("subjects").get()
@@ -108,7 +111,7 @@ public class UserEditActivity extends AppCompatActivity {
                                                     DocumentSnapshot allSubjectDoc = task.getResult();
                                                     if (document.exists()) {
                                                         ArrayList<String> allSubjects = (ArrayList<String>) allSubjectDoc.get("subjectList");
-                                                        for(String subject:allSubjects){
+                                                        for (String subject : allSubjects) {
                                                             newSubjectLine(document, subject);
                                                         }
                                                     }
@@ -119,5 +122,9 @@ public class UserEditActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public static String getEmail() {
+        return email;
     }
 }
