@@ -197,6 +197,10 @@ public class Post extends AppCompatActivity {
         }
     }
 
+    public static Adapters.Post getPost() {
+        return post;
+    }
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

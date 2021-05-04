@@ -29,7 +29,6 @@ import static Adapters.Authentication.getCurrentUser;
 public class MyPosts extends AppCompatActivity {
     private ArrayList<Post> posts, replies;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +125,10 @@ public class MyPosts extends AppCompatActivity {
 
     private void goToPost(){
         startActivity(new Intent(this, UI.Forum.Post.class));
+    }
+
+    public ArrayList<Post> getReplies() {
+        return replies;
     }
 
     public ArrayList getMyPostsList()

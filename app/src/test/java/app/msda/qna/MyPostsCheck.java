@@ -8,7 +8,7 @@ public class MyPostsCheck {
     @Test
     public void isCloudDBExist() {
         MyPosts posts = new MyPosts();// creating a new object of class MyPosts succeeded
-        assertEquals(posts.getDB(), posts.getDB()); //checking that the class has DB
+        assertEquals(posts.getReplies(), posts.getReplies()); //checking that the class has replies list
     }
 
     @Test
