@@ -31,13 +31,13 @@ public class UserManagementActivity extends AppCompatActivity {
         Update();
     }
 
-    private void Update(){
+    private void Update() {
         ArrayList<String> userList = new ArrayList<>();
         CloudFireStore.getInstance().collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for(DocumentSnapshot doc:task.getResult()) {
+                    for (DocumentSnapshot doc : task.getResult()) {
                         userList.add(doc.getId());
                     }
                     Collections.sort(userList);
@@ -47,22 +47,25 @@ public class UserManagementActivity extends AppCompatActivity {
         });
     }
 
-    public void addUserButtons(ArrayList<String> userList){
-        LinearLayout userListLayout = ((LinearLayout)findViewById(R.id.userList));
-        for(String user:userList){
-            Button userButton = new Button(this);
-            userButton.setText(user);
-            userButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    UserEditActivity.email = user;
-                    goToUserEdit();
-                }
-            });
-            userListLayout.addView(userButton);
+    public void addUserButtons(ArrayList<String> userList) {
+        try {
+            LinearLayout userListLayout = ((LinearLayout) findViewById(R.id.userList));
+            for (String user : userList) {
+                Button userButton = new Button(this);
+                userButton.setText(user);
+                userButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        UserEditActivity.email = user;
+                        goToUserEdit();
+                    }
+                });
+                userListLayout.addView(userButton);
+            }
+        } catch (Exception e) {
         }
     }
 
-    private void goToUserEdit(){
+    private void goToUserEdit() {
         startActivity(new Intent(this, UserEditActivity.class));
     }
 }
