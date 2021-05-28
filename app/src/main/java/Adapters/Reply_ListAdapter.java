@@ -90,7 +90,6 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked - delete post
                                 Post.post.getPost().getReference().collection("replies").document("reply "+getItem(position).getReplyID()).delete();
-
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:

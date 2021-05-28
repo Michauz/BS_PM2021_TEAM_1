@@ -56,7 +56,7 @@ public class Post extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888, REQUEST_CODE = 1;
     private Bitmap image;
     private Context context;
-    private Activity thisActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +66,6 @@ public class Post extends AppCompatActivity {
         reply = findViewById(R.id.replyContent);
         postImage = findViewById(R.id.postImg);
         ((TextView) findViewById(R.id.postContent)).setMovementMethod(new ScrollingMovementMethod());
-        thisActivity=this;
 
         post.getPost().getReference().collection("replies").document("reply_counter").get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -253,10 +252,5 @@ public class Post extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
-    }
-
-    public void finishActivity()
-    {
-        finish();
     }
 }
