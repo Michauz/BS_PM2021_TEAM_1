@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             constraintSet.applyTo(findViewById(R.id.main));
             TextView user = findViewById(R.id.user);
             user.setVisibility(View.VISIBLE);
-            user.setText("Hey "+getCurrentUser().getEmail().split("@")[0]);
+            user.setText(getCurrentUser().getEmail().split("@")[0]);
         } else {
             (findViewById(R.id.goto_sign_in)).setVisibility(View.VISIBLE);
             (findViewById(R.id.goto_sign_up)).setVisibility(View.VISIBLE);
