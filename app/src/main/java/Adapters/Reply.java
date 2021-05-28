@@ -35,6 +35,14 @@ public class Reply {
         }
     }
 
+    public int getReplyID() {
+        return replyID;
+    }
+
+    public int getPostID() {
+        return postID;
+    }
+
     private void setImg() {
         FireBaseStorage.getInstance().getReference().listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override

@@ -32,9 +32,6 @@ public class Post implements Comparable {
             setReplies();
         } catch (Exception e) {
         }
-        /*
-        Access to image in storage and convert to Image object here.
-         */
     }
 
     public String getTitle() {

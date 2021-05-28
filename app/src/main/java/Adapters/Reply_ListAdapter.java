@@ -80,6 +80,32 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
             replyImage.requestLayout();
         }
 
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked - delete post
+                                Post.post.getPost().getReference().collection("replies").document("reply "+getItem(position).getReplyID()).delete();
+
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure you want to delete the reply?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+            }
+        });
+
         return rowView;
     }
 
@@ -87,5 +113,10 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
         dateFormat.setTimeZone(TimeZone.getTimeZone("Israel"));
         return dateFormat.format(date);
+    }
+
+    @Override
+    public Reply getItem(int position) {
+        return replies.get(position);
     }
 }

@@ -26,7 +26,7 @@ import app.msda.qna.R;
 public class Forum extends AppCompatActivity {
     static public String forumName;
     private ArrayList<Post> posts;
-
+    private boolean isStart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +34,17 @@ public class Forum extends AppCompatActivity {
         posts = new ArrayList<>();
         ((TextView)findViewById(R.id.forumName)).setText(forumName);
         getPosts();
+        isStart=true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!isStart) {
+            finish();
+            startActivity(new Intent(this, Forum.class));
+        }
+        isStart=false;
     }
 
     private void getPosts(){
@@ -92,10 +103,5 @@ public class Forum extends AppCompatActivity {
         UploadPost.forum = forumName;
         startActivity(new Intent(this, UploadPost.class));
         getPosts();
-    }
-
-    public ArrayList getMyPostsList()
-    {
-        return posts;
     }
 }

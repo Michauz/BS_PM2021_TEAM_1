@@ -47,18 +47,26 @@ import Adapters.Permissions;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
-
+    private boolean isAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Permissions.begForPermissions(this);
+        isAdmin=false;
         Update();
     }
 
     private void Update() {
         buttonsUpdate();
-        forumUpdate();
+        if(isAdmin)
+            addForums(new ArrayList<String>() {{
+                add("Math");
+                add("Physics");
+                add("Literature");
+            }});
+        else
+            forumUpdate();
     }
 
     private void buttonsUpdate(){
@@ -71,7 +79,10 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists() && document.getLong("permission")==2) // get the reply ID from DB
+                                {
                                     (findViewById(R.id.goto_admin)).setVisibility(View.VISIBLE);
+                                    isAdmin=true;
+                                }
                             }
                         }
                     });
@@ -176,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void SignOut(View view) {
         getInstance().signOut();
+        ((LinearLayout)findViewById(R.id.ForumList)).removeAllViews();
         Update();
     }
 
