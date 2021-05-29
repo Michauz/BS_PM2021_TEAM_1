@@ -187,8 +187,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void SignOut(View view) {
         getInstance().signOut();
-        ((LinearLayout)findViewById(R.id.ForumList)).removeAllViews();
-        Update();
+        //((LinearLayout)findViewById(R.id.ForumList)).removeAllViews();
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
+        //Update();
     }
 
     public void MyPosts(View view){
