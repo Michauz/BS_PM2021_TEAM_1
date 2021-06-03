@@ -86,6 +86,8 @@ public class UserEditActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) { // get the reply ID from DB
+                                if(document.getLong("permission")!=2)
+                                    finish();
                                 switch (document.getLong("permission").intValue()) {
                                     case 0:
                                         ((RadioButton) findViewById(R.id.radioButton1)).setChecked(true);

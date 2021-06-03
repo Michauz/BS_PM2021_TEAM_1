@@ -1,11 +1,18 @@
 package UI.Admin;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import Adapters.Authentication;
+import Adapters.CloudFireStore;
 import UI.LoginActivity;
 import app.msda.qna.R;
 
@@ -25,8 +32,15 @@ public class AdminActivity extends AppCompatActivity {
     }
 
     private void Update(){
-        /* Finish if user isn't Admin - for safety measures
-        if(getCurrentUser())
-        */
+        CloudFireStore.getInstance().collection("users").document(Authentication.getCurrentUser().getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists() && doc.getLong("permission")!=2)
+                            finish();
+                }
+            }
+        });
     }
 }
