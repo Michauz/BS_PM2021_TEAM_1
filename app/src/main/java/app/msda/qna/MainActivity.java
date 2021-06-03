@@ -60,11 +60,17 @@ public class MainActivity extends AppCompatActivity {
     private void Update() {
         buttonsUpdate();
         if(isAdmin)
-            addForums(new ArrayList<String>() {{
-                add("Math");
-                add("Physics");
-                add("Literature");
-            }});
+            CloudFireStore.getInstance().collection("vars").document("subjects").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot doc = task.getResult();
+                        if(doc.exists()){
+                            addForums((ArrayList<String>)doc.get("subjectList"));
+                        }
+                    }
+                }
+            });
         else
             forumUpdate();
     }
