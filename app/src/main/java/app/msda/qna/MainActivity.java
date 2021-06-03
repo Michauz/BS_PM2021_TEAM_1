@@ -110,70 +110,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void forumUpdate(){
-        if (getCurrentUser() != null){
-            CloudFireStore.getInstance().collection("users")
-                    .document(Authentication.getCurrentUser().getEmail())
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot doc = task.getResult();
-                        if (doc.exists()) {
-                            ArrayList<String> forums = (ArrayList<String>) doc.get("subjects");
-                            addForums(forums);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private void addForums(ArrayList<String> forums){
-        ((LinearLayout)findViewById(R.id.ForumList)).removeAllViews();
-        ArrayList<LinearLayout> lines = new ArrayList<>();
-        //Params var for all views.
-        RelativeLayout.LayoutParams params;
-        for(int i=0;i<forums.size()/3+1;i++) {
-            LinearLayout newline = new LinearLayout(this);
-            params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            newline.setOrientation(LinearLayout.HORIZONTAL);
-            newline.setLayoutParams(params);
-            lines.add(newline);
-        }
-        for(int i=0;i<forums.size();i++){
-            Button forum = new Button(this);
-            forum.setText(forums.get(i));
-            forum.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Forum.forumName = ((Button)v).getText().toString();
-                    Forum();
-                }
-            });
-            params = new RelativeLayout.LayoutParams(((LinearLayout)findViewById(R.id.ForumList)).getWidth()/3, ((LinearLayout)findViewById(R.id.ForumList)).getWidth()/3);
-            lines.get(i/3).addView(forum,params);
-        }
-        for(LinearLayout line:lines)
-            ((LinearLayout)findViewById(R.id.ForumList)).addView(line);
-        /*//Button as post
-        Button post = new Button(this);
-        post.setId(i);
-        post.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-        if(posts.get(i).getTitle().length()>100)
-            post.setText(posts.get(i).getTitle().substring(0,100));
-        else
-            post.setText(posts.get(i).getTitle());
-        post.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                UI.Forum.Post.post = posts.get(v.getId());
-                goToPost();
-            }
-        });
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_VERTICAL);
-        newline.addView(post,params);
-        ((LinearLayout)findViewById(R.id.insideScroll)).addView(newline);*/
-    }
+    
 
     public void SignIn(View view) {
         startActivity(new Intent(this, LoginActivity.class));
