@@ -19,7 +19,7 @@ public class Post implements Comparable {
     private ArrayList<Reply> replies;
     private DocumentSnapshot post;
     private int id;
-
+    private boolean isAdmin;
     public Post(DocumentSnapshot doc) {
         try {
             title = (String) doc.get("title");
@@ -30,8 +30,17 @@ public class Post implements Comparable {
             post = doc;
             id = doc.getDouble("postID").intValue();
             setReplies();
+            isAdmin=false;
         } catch (Exception e) {
         }
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
     public String getTitle() {

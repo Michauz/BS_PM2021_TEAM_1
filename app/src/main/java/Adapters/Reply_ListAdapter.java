@@ -86,10 +86,10 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked - delete post
-                                Post.post.getPost().getReference().collection("replies").document("reply "+getItem(position).getReplyID()).delete();
+                                Post.post.getPost().getReference().collection("replies").document("reply " + getItem(position).getReplyID()).delete();
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -99,9 +99,11 @@ public class Reply_ListAdapter extends ArrayAdapter<Reply> {
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Are you sure you want to delete the reply?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
+                if (Post.post.isAdmin()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Are you sure you want to delete the reply?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
             }
         });
 

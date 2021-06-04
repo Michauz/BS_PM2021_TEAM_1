@@ -58,7 +58,7 @@ public class Post extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888, REQUEST_CODE = 1;
     private Bitmap image;
     private Context context;
-
+    private boolean isAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +80,7 @@ public class Post extends AppCompatActivity {
                         }
                     }
                 });
-
+        isAdmin=false;
         setPostImage();
         CloudFireStore.getInstance().collection("users").document(Authentication.getCurrentUser().getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -88,8 +88,11 @@ public class Post extends AppCompatActivity {
                 if(task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
                     if(doc.exists()){
-                        if(doc.getLong("permission")==2)
-                            ((Button)findViewById(R.id.deleteBtn)).setVisibility(View.VISIBLE);
+                        if(doc.getLong("permission")==2) {
+                            ((Button) findViewById(R.id.deleteBtn)).setVisibility(View.VISIBLE);
+                            isAdmin=true;
+                            post.setAdmin(true);
+                        }
                         else
                             ((Button)findViewById(R.id.deleteBtn)).setVisibility(View.GONE);
                     }
