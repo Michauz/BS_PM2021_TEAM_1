@@ -47,32 +47,28 @@ import Adapters.Permissions;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
-    private boolean isAdmin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Permissions.begForPermissions(this);
-        isAdmin=false;
+        Update();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Update();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         Update();
     }
 
     private void Update() {
         buttonsUpdate();
-        if(isAdmin)
-            CloudFireStore.getInstance().collection("vars").document("subjects").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
-                        DocumentSnapshot doc = task.getResult();
-                        if(doc.exists()){
-                            addForums((ArrayList<String>)doc.get("subjectList"));
-                        }
-                    }
-                }
-            });
-        else
-            forumUpdate();
     }
 
     private void buttonsUpdate(){
@@ -84,10 +80,24 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
-                                if (document.exists() && document.getLong("permission")==2) // get the reply ID from DB
-                                {
-                                    (findViewById(R.id.goto_admin)).setVisibility(View.VISIBLE);
-                                    isAdmin=true;
+                                if (document.exists()) {
+                                    if (document.getLong("permission") == 2) // get the reply ID from DB
+                                    {
+                                        (findViewById(R.id.goto_admin)).setVisibility(View.VISIBLE);
+                                        CloudFireStore.getInstance().collection("vars").document("subjects").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot doc = task.getResult();
+                                                    if (doc.exists()) {
+                                                        addForums((ArrayList<String>) doc.get("subjectList"));
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else
+                                        forumUpdate();
                                 }
                             }
                         }
