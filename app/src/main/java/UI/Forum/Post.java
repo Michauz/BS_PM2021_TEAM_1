@@ -35,6 +35,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.w3c.dom.Document;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,7 +58,7 @@ public class Post extends AppCompatActivity {
     private final int CAMERA_REQUEST = 1888, REQUEST_CODE = 1;
     private Bitmap image;
     private Context context;
-
+    private boolean isAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +80,25 @@ public class Post extends AppCompatActivity {
                         }
                     }
                 });
-
+        isAdmin=false;
         setPostImage();
-
+        CloudFireStore.getInstance().collection("users").document(Authentication.getCurrentUser().getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
+                        if(doc.getLong("permission")==2) {
+                            ((Button) findViewById(R.id.deleteBtn)).setVisibility(View.VISIBLE);
+                            isAdmin=true;
+                            post.setAdmin(true);
+                        }
+                        else
+                            ((Button)findViewById(R.id.deleteBtn)).setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
         list = findViewById(R.id.postReplies);
         list.setAdapter(new Reply_ListAdapter(this, post.getReplies()));
     }

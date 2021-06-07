@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import Adapters.Authentication;
 import Adapters.CloudFireStore;
 import app.msda.qna.R;
 
@@ -33,6 +34,16 @@ public class UserManagementActivity extends AppCompatActivity {
 
     private void Update() {
         ArrayList<String> userList = new ArrayList<>();
+        CloudFireStore.getInstance().collection("users").document(Authentication.getCurrentUser().getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists() && doc.getLong("permission")!=2)
+                        finish();
+                }
+            }
+        });
         CloudFireStore.getInstance().collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

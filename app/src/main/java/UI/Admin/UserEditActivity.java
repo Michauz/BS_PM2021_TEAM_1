@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
+import Adapters.Authentication;
 import Adapters.CloudFireStore;
 import app.msda.qna.R;
 
@@ -79,6 +80,16 @@ public class UserEditActivity extends AppCompatActivity {
 
     private void Update() {
         ((TextView) findViewById(R.id.userName)).setText(email);
+        CloudFireStore.getInstance().collection("users").document(Authentication.getCurrentUser().getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists() && doc.getLong("permission")!=2)
+                        finish();
+                }
+            }
+        });
         CloudFireStore.getInstance().collection("users").document(email).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
